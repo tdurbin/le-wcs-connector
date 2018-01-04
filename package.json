@@ -1,0 +1,17 @@
+{
+  "name": "le_wcs_connector",
+  "version": "1.0.0",
+  "description": "le_wcs_connector",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "tdurbin",
+  "dependencies": {
+    "@watson-virtual-agent/client-sdk": "^1.3.0",
+    "dotenv": "^4.0.0",
+    "node-agent-sdk": "^0.2.11",
+    "prompt-sync": "^4.1.5",
+    "watson-developer-cloud": "^2.32.1"
+  }
+}
