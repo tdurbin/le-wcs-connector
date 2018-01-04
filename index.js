@@ -5,6 +5,7 @@
 require('dotenv').config();
 
 // This section is for the deployment of the connector on heroku
+// You can comment this out when running locally.
 // *************************************************************
 var http = require('http');
 http.createServer(function (req, res) {
