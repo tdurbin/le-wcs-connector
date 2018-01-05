@@ -14,10 +14,10 @@ http.createServer(function (req, res) {
     res.end();
 }).listen(process.env.PORT || 6000);
 
-/* example code to keep heroku app running */
+/* example code to keep heroku app running
 setInterval(function() {
     http.get("http://le-wcs-connector.herokuapp.com");
-}, 600000);
+}, 600000); */
 // *************************************************************
 
 var prompt = require('prompt-sync')();
