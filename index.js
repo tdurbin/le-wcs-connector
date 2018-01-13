@@ -14,9 +14,10 @@ http.createServer(function (req, res) {
     res.end();
 }).listen(process.env.PORT || 6000);
 
-// ping heroku every 10 minutes to keep the connector running 
+// ping heroku every 10 minutes to keep the connector running
 setInterval(function() {
     http.get("http://le-wcs-connector.herokuapp.com");
+    http.get("http://vw-wcs-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
 
