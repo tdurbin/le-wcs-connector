@@ -7,8 +7,8 @@
 // This section is for the deployment of the connector on heroku
 // You can comment this out when running locally.
 // *************************************************************
-var https = require('https');
-https.createServer(function (req, res) {
+var http = require('http');
+http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.write('Super Awesome Connector for WCS');
     res.end();
@@ -16,7 +16,7 @@ https.createServer(function (req, res) {
 
 // ping heroku every 10 minutes to keep the connector running
 setInterval(function() {
-    https.get("https://td-wcs-connector.herokuapp.com");
+    http.get("http://td-wcs-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
 
