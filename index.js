@@ -215,9 +215,9 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     dialogID = contentEvent.dialogId;
     conversation.message({
         input: {
-            text: contentEvent.message,
-            workspace_id: process.env.WCS_WORKSPACE_ID
+            text: contentEvent.message
         },
+        workspace_id: process.env.WCS_WORKSPACE_ID,
         context: context
     }, processResponse);
 
