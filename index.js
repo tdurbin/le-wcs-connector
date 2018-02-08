@@ -39,10 +39,7 @@ var skillId = "";
 var conversation = new ConversationV1({
     username: process.env.WCS_USERNAME,
     password: process.env.WCS_PASSWORD,
-    path: {
-        workspace_id: process.env.WCS_WORKSPACE_ID
-    },
-    version_date: '2016-07-11'
+    version_date: ConversationV1.VERSION_DATE_2017_05_26
 });
 
 // LE bot agent credentials.
@@ -218,7 +215,8 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     dialogID = contentEvent.dialogId;
     conversation.message({
         input: {
-            text: contentEvent.message
+            text: contentEvent.message,
+            workspace_id: process.env.WCS_WORKSPACE_ID
         },
         context: context
     }, processResponse);
