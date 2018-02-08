@@ -2,7 +2,7 @@
  * Super Awesome Connector for WCS *
  ***********************************/
 
-// require('dotenv').config();
+require('dotenv').config();
 
 // This section is for the deployment of the connector on heroku
 // You can comment this out when running locally.
