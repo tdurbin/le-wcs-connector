@@ -35,6 +35,7 @@ var waittime = 0;
 var item = 0;
 var snippet = [];
 var allSkills = [];
+var skillName = "";
 var skillId = "";
 var accountId = process.env.LP_ACCOUNT_ID;
 
@@ -177,9 +178,11 @@ function processResponse(err, response) {
                             var closeHour = process.env.OPERATING_HOURS_END_HH;
                             var closeMins = process.env.OPERATING_HOURS_END_MM;
                             var off_hours = true; // Assume off hours is true until it is evaluated as false
-                            skillId = response.output.action.skill; // Set skillId to the value in the JSON response
+                            skillName = response.output.action.skill; // Set skillName to the value in the JSON response
+                            skillId = convertSkill(); // Convert skillName to skillID
 
-                            console.log('Detected skill : ' + skillId);
+                            console.log('Detected skill : ' + skillName);
+                            console.log('    ...skillID : ' + skillID);
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
                             if (currentHour > openHour && currentHour < closeHour) {
@@ -378,7 +381,7 @@ function convertSkill() {
 
     var found = 0;
     for (var i = 0; i < allSkills.length; i++) {
-        if (allSkills[i].name === skill) {
+        if (allSkills[i].name === skillName) {
             found = 1;
             console.log("found");
             console.log(allSkills[i].name + " <--> " + allSkills[i].id);
@@ -393,7 +396,7 @@ function convertSkill() {
 }
 
 echoAgent.on('connected', data => {
-    console.log('We are live connect to account: ' + accountId);
+    console.log('We are live connected to account: ' + accountId);
     retrieveSkill();
 });
 
