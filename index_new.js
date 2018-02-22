@@ -23,6 +23,7 @@ setInterval(function() {
 var prompt = require('prompt-sync')();
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 var MyCoolAgent = require('./MyCoolAgent');
+var request = require('request');
 var context = {};
 var dialogID = "";
 var answer = "";
