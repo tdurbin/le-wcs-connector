@@ -223,6 +223,7 @@ function processResponse(err, response) {
     }
 }
 
+/*******************************************************************
 // This code sends the customer message to the bot.
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     dialogID = contentEvent.dialogId;
@@ -235,6 +236,21 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     }, processResponse);
 
     console.log('Inbound message: ' + contentEvent.message);
+});
+*******************************************************************/
+
+// This code sends the customer message to the bot.
+echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
+    dialogID = contentEvent.dialogId;
+    conversation.message({
+        input: {
+            text: contentEvent.message
+        },
+        workspace_id: process.env.WCS_WORKSPACE_ID
+    }, processResponse);
+
+    console.log('Inbound message: ' + contentEvent.message);
+
 });
 
 /*******************************************************************
