@@ -76,7 +76,7 @@ function processResponse(err, response) {
 
     console.log(response);
 
-    context = response.context;
+    //context = response.context;
 
     if (response.output.text.length != 0) {
 
@@ -241,6 +241,7 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     }, processResponse);
 
     console.log('Inbound message: ' + contentEvent.message);
+    console.log(contentEvent);
 });
 
 /*******************************************************************
