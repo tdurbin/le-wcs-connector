@@ -99,7 +99,6 @@ class MyCoolAgent extends Agent {
 
                 if (openConvs[c.dialogId]) {
                     // add to respond list all content event not by me
-                    console.log('Originator role :' + c.originatorMetadata.role);
                     if (c.event.type === 'ContentEvent' && c.originatorMetadata.role === 'CONSUMER' && c.originatorId !== this.agentId) {
                         respond[`${body.dialogId}-${c.sequence}`] = {
                             dialogId: body.dialogId,
