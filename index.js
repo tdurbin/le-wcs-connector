@@ -347,7 +347,7 @@ function transferConversation(skillId) {
         if (err) {
             console.log(err);
         } else {
-            console.log("*** Transfer to SkillId '" + skillId + "' completed ***");
+            console.log("*** Transfer to SkillId " + skillId + " completed ***");
         }
     });
 
