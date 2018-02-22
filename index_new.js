@@ -36,7 +36,7 @@ var item = 0;
 var snippet = [];
 var allSkills = [];
 var skillName = "";
-var skillId = "";
+var skillId = 0;
 var accountId = process.env.LP_ACCOUNT_ID;
 
 
@@ -182,7 +182,7 @@ function processResponse(err, response) {
                             skillId = convertSkill(); // Convert skillName to skillID
 
                             console.log('Detected skill : ' + skillName);
-                            console.log('    ...skillID : ' + skillID);
+                            console.log('    ...skillId : ' + skillId);
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
                             if (currentHour > openHour && currentHour < closeHour) {
