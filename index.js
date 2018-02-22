@@ -74,6 +74,8 @@ function processResponse(err, response) {
         return;
     }
 
+    console.log(response);
+
     context = response.context;
 
     if (response.output.text.length != 0) {
