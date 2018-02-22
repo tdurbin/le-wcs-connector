@@ -237,7 +237,6 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     }, processResponse);
 
     console.log('Inbound message: ' + contentEvent.message);
-    console.log(contentEvent);
 });
 
 /*******************************************************************
