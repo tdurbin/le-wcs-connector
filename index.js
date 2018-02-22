@@ -76,8 +76,6 @@ function processResponse(err, response) {
 
     console.log(response);
 
-    //context = response.context;
-
     if (response.output.text.length != 0) {
 
         // Initiate typing indicator prior to the bot response.
@@ -185,8 +183,6 @@ function processResponse(err, response) {
                             skillName = response.output.action.skill; // Set skillName to the value in the JSON response
                             skillId = convertSkill(); // Convert skillName to skillID
 
-                        //    console.log('Detected skill : ' + skillName);
-                        //    console.log('    ...skillId : ' + skillId);
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
                             if (currentHour > openHour && currentHour < closeHour) {
