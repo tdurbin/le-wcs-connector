@@ -362,7 +362,7 @@ function retrieveSkill() {
             'Content-Type': 'application/json'
         }
     }, function(e, r, b) {
-        console.log(JSON.stringify(b));
+//        console.log(JSON.stringify(b));
         allSkills = b;
 
         for (var i = 0; i < b.length; i++) {
@@ -391,7 +391,7 @@ function convertSkill() {
 }
 
 echoAgent.on('connected', data => {
-    console.log('we are live');
+    console.log('We are live connect to account: ' + accountId);
     retrieveSkill();
 });
 
