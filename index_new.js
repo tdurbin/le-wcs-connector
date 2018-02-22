@@ -36,6 +36,8 @@ var item = 0;
 var snippet = [];
 var allSkills = [];
 var skillId = "";
+var accountId = process.env.LP_ACCOUNT_ID;
+
 
 // Watson Conversation credentials.
 var conversation = new ConversationV1({
