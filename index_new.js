@@ -181,8 +181,8 @@ function processResponse(err, response) {
                             skillName = response.output.action.skill; // Set skillName to the value in the JSON response
                             skillId = convertSkill(); // Convert skillName to skillID
 
-                            console.log('Detected skill : ' + skillName);
-                            console.log('    ...skillId : ' + skillId);
+                        //    console.log('Detected skill : ' + skillName);
+                        //    console.log('    ...skillId : ' + skillId);
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
                             if (currentHour > openHour && currentHour < closeHour) {
@@ -355,6 +355,7 @@ function transferConversation(skillId) {
 
 }
 
+// This function retrieves all the Skill ID's corresponding Skill Names and loads into an array.
 function retrieveSkill() {
 
     // Get a list of all the skills
@@ -369,34 +370,36 @@ function retrieveSkill() {
     }, function(e, r, b) {
 //        console.log(JSON.stringify(b));
         allSkills = b;
+        console.log('*** Skills successfully loaded ***');
 
-        for (var i = 0; i < b.length; i++) {
-            console.log(b[i].id + " " + b[i].name);
-        }
+
+//        for (var i = 0; i < b.length; i++) {
+//            console.log(b[i].id + " " + b[i].name);
+//        }
     });
 
 }
 
+// This function converts a Skill Name to a Skill ID.
 function convertSkill() {
 
     var found = 0;
     for (var i = 0; i < allSkills.length; i++) {
         if (allSkills[i].name === skillName) {
             found = 1;
-            console.log("found");
-            console.log(allSkills[i].name + " <--> " + allSkills[i].id);
+            console.log('Detected skill  : ' + allSkills[i].name + ' <--> ' + allSkills[i].id);
             return allSkills[i].id;
         }
     }
     if (!found) {
-        console.log("not found");
+        console.log('*** WARNING: skill not found ***');
         return -1;
     }
 
 }
 
 echoAgent.on('connected', data => {
-    console.log('We are live connected to account: ' + accountId);
+    console.log('*** Retrieving skills from account ' + accountId + ' ***');
     retrieveSkill();
 });
 
