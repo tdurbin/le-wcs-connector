@@ -387,7 +387,7 @@ function convertSkill() {
     for (var i = 0; i < allSkills.length; i++) {
         if (allSkills[i].name === skillName) {
             found = 1;
-            console.log('Detected skill  : ' + allSkills[i].name + ' <--> ' + allSkills[i].id);
+            console.log('Detected skill : ' + allSkills[i].name + ' <--> ' + allSkills[i].id);
             return allSkills[i].id;
         }
     }
