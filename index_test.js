@@ -46,7 +46,7 @@ var accountId = process.env.LP_ACCOUNT_ID;
 var conversation = new ConversationV1({
     username: process.env.WCS_USERNAME,
     password: process.env.WCS_PASSWORD,
-    version_date: ConversationV1.VERSION_DATE_2017_05_26
+    version_date: '2016-07-11'
 });
 
 // LE bot agent credentials.
