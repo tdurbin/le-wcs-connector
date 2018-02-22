@@ -345,7 +345,7 @@ function transferConversation(skillId) {
 function retrieveSkill() {
 
     // Get a list of all the skills
-    var url = 'https://va-a.acr.liveperson.net/api/account/58977529/configuration/le-users/skills';
+    var url = 'https://va-a.acr.liveperson.net/api/account/64096141/configuration/le-users/skills';
     request.get({
         url: url,
         oauth: oauth,
