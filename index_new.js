@@ -56,10 +56,10 @@ var echoAgent = new MyCoolAgent({
 
 // API oauth1 credentials.
 var oauth = {
-    apiAppKey: process.env.LP_API_APP_KEY,
-    apiSecret: process.env.LP_API_SECRET,
-    apiAccessToken: process.env.LP_API_ACCESS_TOKEN,
-    apiAccessTokenSecret: process.env.LP_API_ACCESS_TOKEN_SECRET
+    consumer_key: process.env.LP_API_APP_KEY,
+    consumer_secret: process.env.LP_API_SECRET,
+    token: process.env.LP_API_ACCESS_TOKEN,
+    token_secret: process.env.LP_API_ACCESS_TOKEN_SECRET
 };
 
 // Process the conversation response.
