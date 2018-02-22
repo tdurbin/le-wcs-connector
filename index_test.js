@@ -230,7 +230,7 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
         input: {
             text: contentEvent.message
         },
-        context: context
+        workspace_id: process.env.WCS_WORKSPACE_ID
     }, processResponse);
 
     console.log('Inbound message: ' + contentEvent.message);
