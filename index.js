@@ -16,13 +16,16 @@ http.createServer(function (req, res) {
 
 // ping heroku every 10 minutes to keep the connector running
 setInterval(function() {
+//  http.get("http://le-wcs-connector.herokuapp.com");
     http.get("http://td-wcs-connector.herokuapp.com");
+
 }, 600000);
 // *************************************************************
 
 var prompt = require('prompt-sync')();
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 var MyCoolAgent = require('./MyCoolAgent');
+var request = require('request');
 var context = {};
 var dialogID = "";
 var answer = "";
@@ -33,7 +36,11 @@ var closedelay = parseInt(process.env.CLOSE_DELAY, 10); // Convert the CLOSE_DEL
 var waittime = 0;
 var item = 0;
 var snippet = [];
-var skillId = "";
+var allSkills = [];
+var skillName = "";
+var skillId = 0;
+var accountId = process.env.LP_ACCOUNT_ID;
+
 
 // Watson Conversation credentials.
 var conversation = new ConversationV1({
@@ -51,6 +58,14 @@ var echoAgent = new MyCoolAgent({
     accessToken: process.env.LP_ACCOUNT_ACCESS_TOKEN,
     accessTokenSecret: process.env.LP_ACCOUNT_ACCESS_TOKEN_SECRET
 });
+
+// API oauth1 credentials.
+var oauth = {
+    consumer_key: process.env.LP_API_APP_KEY,
+    consumer_secret: process.env.LP_API_SECRET,
+    token: process.env.LP_API_ACCESS_TOKEN,
+    token_secret: process.env.LP_API_ACCESS_TOKEN_SECRET
+};
 
 // Process the conversation response.
 function processResponse(err, response) {
@@ -165,9 +180,11 @@ function processResponse(err, response) {
                             var closeHour = process.env.OPERATING_HOURS_END_HH;
                             var closeMins = process.env.OPERATING_HOURS_END_MM;
                             var off_hours = true; // Assume off hours is true until it is evaluated as false
-                            skillId = response.output.action.skill; // Set skillId to the value in the JSON response
+                            skillName = response.output.action.skill; // Set skillName to the value in the JSON response
+                            skillId = convertSkill(); // Convert skillName to skillID
 
-                            console.log('Detected skill : ' + skillId);
+                        //    console.log('Detected skill : ' + skillName);
+                        //    console.log('    ...skillId : ' + skillId);
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
                             if (currentHour > openHour && currentHour < closeHour) {
@@ -339,5 +356,48 @@ function transferConversation(skillId) {
     });
 
 }
+
+// This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
+function retrieveSkill() {
+
+    // Get a list of all the skills
+    var url = 'https://va-a.acr.liveperson.net/api/account/' + accountId + '/configuration/le-users/skills';
+    request.get({
+        url: url,
+        oauth: oauth,
+        json: true,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }, function(e, r, b) {
+        allSkills = b;
+        console.log('*** Skills successfully loaded ***');
+
+    });
+
+}
+
+// This function converts a Skill Name to a Skill ID.
+function convertSkill() {
+
+    var found = 0;
+    for (var i = 0; i < allSkills.length; i++) {
+        if (allSkills[i].name === skillName) {
+            found = 1;
+            console.log('Detected skill : ' + allSkills[i].name + ' <--> ' + allSkills[i].id);
+            return allSkills[i].id;
+        }
+    }
+    if (!found) {
+        console.log('*** WARNING: skill not found ***');
+        return -1;
+    }
+
+}
+
+echoAgent.on('connected', data => {
+    console.log('*** Retrieving skills from account ' + accountId + ' ***');
+    retrieveSkill();
+});
 
 /*********************************** EOF ***********************************/
