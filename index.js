@@ -74,8 +74,6 @@ function processResponse(err, response) {
         return;
     }
 
-    console.log(response);
-
     if (response.output.text.length != 0) {
 
         // Initiate typing indicator prior to the bot response.
