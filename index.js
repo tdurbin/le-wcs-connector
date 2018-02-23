@@ -46,7 +46,7 @@ var accountId = process.env.LP_ACCOUNT_ID;
 var conversation = new ConversationV1({
     username: process.env.WCS_USERNAME,
     password: process.env.WCS_PASSWORD,
-    version_date: ConversationV1.VERSION_DATE_2017_05_26
+    version_date: '2016-07-11'
 });
 
 // LE bot agent credentials.
@@ -223,7 +223,6 @@ function processResponse(err, response) {
     }
 }
 
-/*******************************************************************
 // This code sends the customer message to the bot.
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
     dialogID = contentEvent.dialogId;
@@ -231,26 +230,10 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
         input: {
             text: contentEvent.message
         },
-        workspace_id: process.env.WCS_WORKSPACE_ID,
         context: context
     }, processResponse);
 
     console.log('Inbound message: ' + contentEvent.message);
-});
-*******************************************************************/
-
-// This code sends the customer message to the bot.
-echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
-    dialogID = contentEvent.dialogId;
-    conversation.message({
-        input: {
-            text: contentEvent.message
-        },
-        workspace_id: process.env.WCS_WORKSPACE_ID
-    }, processResponse);
-
-    console.log('Inbound message: ' + contentEvent.message);
-
 });
 
 /*******************************************************************
