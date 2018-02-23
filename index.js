@@ -46,6 +46,9 @@ var accountId = process.env.LP_ACCOUNT_ID;
 var conversation = new ConversationV1({
     username: process.env.WCS_USERNAME,
     password: process.env.WCS_PASSWORD,
+    path: {
+        workspace_id: process.env.WCS_WORKSPACE_ID
+    },
     version_date: '2016-07-11'
 });
 
