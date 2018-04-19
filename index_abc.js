@@ -133,7 +133,7 @@ function processResponse(err, response) {
                     sendStructuredContent(answer);
                   }
                   else {
-                    abc_metadata = response.output.metadata;
+                    metadata = response.output.metadata;
                     sendABCStructuredContent(answer);
                   }
                 }
