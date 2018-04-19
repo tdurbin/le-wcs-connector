@@ -130,12 +130,12 @@ function processResponse(err, response) {
                 if (answer.startsWith("{")) {
 
                   if (typeof response.output.metadata !== "undefined") {
-                    sendStructuredContent(answer);
+                    metadata = response.output.metadata;
+                    console.log('ABC MetaData   : ' + metadata);
+                    sendABCStructuredContent(answer, metadata);
                   }
                   else {
-                    abc_metadata = response.output.metadata;
-                    console.log('ABC MetaData   : ' + abc_metadata);
-                    sendABCStructuredContent(answer, abc_metadata);
+                    sendStructuredContent(answer);
                   }
                 }
 
@@ -286,8 +286,8 @@ function sendABCStructuredContent(answer, metadata) {
 
     console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
-    abc_metadata = JSON.parse(abc_metadata);
-    console.log('ABC MetaData   : ' + abc_metadata);
+    abc_metadata = JSON.parse(metadata);
+    console.log('ABC metadata   : ' + abc_metadata);
 
     echoAgent.publishEvent({
         dialogId: dialogID,
