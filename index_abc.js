@@ -28,6 +28,7 @@ var context = {};
 var dialogID = "";
 var answer = "";
 var sc_answer = "";
+var abc_metadata = "";
 var typingdelay = parseInt(process.env.TYPING_DELAY, 10); // Convert the TYPING_DELAY env. variable to an integer
 var snippetdelay = parseInt(process.env.SNIPPET_DELAY, 10); // Convert the ANSWER_DELAY env. variable to an integer
 var closedelay = parseInt(process.env.CLOSE_DELAY, 10); // Convert the CLOSE_DELAY env. variable to an integer
@@ -127,9 +128,14 @@ function processResponse(err, response) {
                 // If structured content is detected, call the sendStructuredContent function.
                 if (answer.startsWith("{")) {
 
+                  if (typeof response.output.metadata !== "undefined") {
                     sendStructuredContent(answer);
-
+                  else {
+                    abc_metadata = response.output.metadata;
+                    sendABCStructuredContent(answer);
+                  }
                 }
+              }
 
                 // Else if line breaks in plain text messsage are detected, send as snippets.
                 else if (answer.includes('|')) {
@@ -272,6 +278,23 @@ function sendStructuredContent(answer) {
     });
 
 }
+
+// This function ends a Structured Content message to the UMS.
+function sendABCStructuredContent(answer) {
+
+    console.log('Message format : Structured content');
+    sc_answer = JSON.parse(answer);
+
+    echoAgent.publishEvent({
+        dialogId: dialogID,
+        event: {
+            type: 'RichContentEvent',
+            content: sc_answer
+        },null,abc_metadata
+    });
+
+}
+
 
 // This function initiates the snippet callback function.
 function sendResponseSnippet(answerarray, item) {
