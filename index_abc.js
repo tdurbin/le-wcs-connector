@@ -290,9 +290,8 @@ function sendABCStructuredContent(answer, abc_metadata) {
         event: {
             type: 'RichContentEvent',
             content: sc_answer
-        },null,abc_metadata
-    });
-
+        }
+    }, null, abc_metadata);
 }
 
 // This function initiates the snippet callback function.
