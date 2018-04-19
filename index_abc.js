@@ -134,7 +134,8 @@ function processResponse(err, response) {
                   }
                   else {
                     metadata = response.output.metadata;
-                    sendABCStructuredContent(answer);
+                    console.log('ABC MetaData   : ' + metadata);
+                    sendABCStructuredContent(answer, metadata);
                   }
                 }
 
@@ -281,7 +282,7 @@ function sendStructuredContent(answer) {
 }
 
 // This function sends an ABC Structured Content message to the UMS.
-function sendABCStructuredContent(answer) {
+function sendABCStructuredContent(answer, metadata) {
 
     console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
