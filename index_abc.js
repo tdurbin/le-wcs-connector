@@ -129,8 +129,8 @@ function processResponse(err, response) {
                 // If structured content is detected, call the sendStructuredContent function.
                 if (answer.startsWith("{")) {
 
-                  if (typeof response.output.metadata !== "undefined") {
-                    metadata = response.output.metadata;
+                  if (typeof response.output.abc !== "undefined") {
+                    metadata = response.output.abc.metadata;
                     console.log('ABC MetaData   : ' + metadata);
                     sendABCStructuredContent(answer, metadata);
                   }
