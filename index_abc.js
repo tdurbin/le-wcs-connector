@@ -291,7 +291,7 @@ function sendABCStructuredContent(answer, abc_metadata) {
             type: 'RichContentEvent',
             content: sc_answer
         }
-    }, null, abc_metadata);
+    }, null, [{"type":"BusinessChatMessage","multipleSelection":true,"receivedMessage":{"style":"icon","subtitle":"Please select from the below list","title":"Choose from the best selection of fashionable exclusives","imageURL":"https://liveengage-abc.herokuapp.com/img/routing/routing_lstpkr_wdgt.png"}}]);
 }
 
 // This function initiates the snippet callback function.
