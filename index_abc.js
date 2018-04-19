@@ -135,6 +135,8 @@ function processResponse(err, response) {
                     sendABCStructuredContent(answer, metadata);
                   }
                   else {
+                    metadata = response.output.abc.metadata;
+                    console.log('ABC MetaData   : ' + metadata);
                     sendStructuredContent(answer);
                   }
                 }
