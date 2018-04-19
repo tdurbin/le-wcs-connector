@@ -286,6 +286,7 @@ function sendABCStructuredContent(answer, metadata) {
     console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
     abc_metadata = JSON.parse(metadata);
+    console.log('ABC MetaData   : ' + abc_metadata);
 
     echoAgent.publishEvent({
         dialogId: dialogID,
