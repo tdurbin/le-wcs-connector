@@ -28,6 +28,7 @@ var context = {};
 var dialogID = "";
 var answer = "";
 var sc_answer = "";
+var metadata = "";
 var abc_metadata = "";
 var typingdelay = parseInt(process.env.TYPING_DELAY, 10); // Convert the TYPING_DELAY env. variable to an integer
 var snippetdelay = parseInt(process.env.SNIPPET_DELAY, 10); // Convert the ANSWER_DELAY env. variable to an integer
@@ -263,10 +264,10 @@ function sendPlainText(answer) {
 
 }
 
-// This function ends a Structured Content message to the UMS.
+// This function sends a Structured Content message to the UMS.
 function sendStructuredContent(answer) {
 
-    console.log('Message format : Structured content');
+    console.log('Message format : LP Structured Content');
     sc_answer = JSON.parse(answer);
 
     echoAgent.publishEvent({
@@ -279,11 +280,12 @@ function sendStructuredContent(answer) {
 
 }
 
-// This function ends an ABC Structured Content message to the UMS.
-function sendABCStructuredContent(answer, abc_metadata) {
+// This function sends an ABC Structured Content message to the UMS.
+function sendABCStructuredContent(answer, metadata) {
 
-    console.log('Message format : Structured content');
+    console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
+    abc_metadata = JSON.parse(metadata);
 
     echoAgent.publishEvent({
         dialogId: dialogID,
@@ -291,7 +293,7 @@ function sendABCStructuredContent(answer, abc_metadata) {
             type: 'RichContentEvent',
             content: sc_answer
         }
-    }, null, [{"type":"BusinessChatMessage","multipleSelection":true,"receivedMessage":{"style":"icon","subtitle":"Please select from the below list","title":"Choose from the best selection of fashionable exclusives","imageURL":"https://liveengage-abc.herokuapp.com/img/routing/routing_lstpkr_wdgt.png"}}]);
+    }, null, abc_metadata);
 }
 
 // This function initiates the snippet callback function.
