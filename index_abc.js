@@ -133,9 +133,9 @@ function processResponse(err, response) {
                     sendStructuredContent(answer);
                   }
                   else {
-                    metadata = response.output.metadata;
-                    console.log('ABC MetaData   : ' + metadata);
-                    sendABCStructuredContent(answer, metadata);
+                    abc_metadata = response.output.metadata;
+                    console.log('ABC MetaData   : ' + abc_metadata);
+                    sendABCStructuredContent(answer, abc_metadata);
                   }
                 }
 
@@ -286,7 +286,7 @@ function sendABCStructuredContent(answer, metadata) {
 
     console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
-    abc_metadata = JSON.parse(metadata);
+    abc_metadata = JSON.parse(abc_metadata);
     console.log('ABC MetaData   : ' + abc_metadata);
 
     echoAgent.publishEvent({
