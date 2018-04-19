@@ -130,12 +130,12 @@ function processResponse(err, response) {
 
                   if (typeof response.output.metadata !== "undefined") {
                     sendStructuredContent(answer);
+                  }
                   else {
                     abc_metadata = response.output.metadata;
                     sendABCStructuredContent(answer);
                   }
                 }
-              }
 
                 // Else if line breaks in plain text messsage are detected, send as snippets.
                 else if (answer.includes('|')) {
@@ -279,8 +279,8 @@ function sendStructuredContent(answer) {
 
 }
 
-// This function ends a Structured Content message to the UMS.
-function sendABCStructuredContent(answer) {
+// This function ends an ABC Structured Content message to the UMS.
+function sendABCStructuredContent(answer, abc_metadata) {
 
     console.log('Message format : Structured content');
     sc_answer = JSON.parse(answer);
@@ -294,7 +294,6 @@ function sendABCStructuredContent(answer) {
     });
 
 }
-
 
 // This function initiates the snippet callback function.
 function sendResponseSnippet(answerarray, item) {
