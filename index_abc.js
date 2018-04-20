@@ -402,8 +402,13 @@ function transferConversation(skillId) {
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
 function retrieveSkill() {
 
+//    var baseURI = 'va-a.ac.liveperson.net' // Alpha
+    var baseURI = 'va.ac.liveperson.net' // US
+//    var baseURI = 'lo.ac.liveperson.net' // UK
+
+
     // Get a list of all the skills
-    var url = 'https://va.ac.liveperson.net/api/account/' + accountId + '/configuration/le-users/skills';
+    var url = 'https://' + baseURI + '/api/account/' + accountId + '/configuration/le-users/skills';
     request.get({
         url: url,
         oauth: oauth,
