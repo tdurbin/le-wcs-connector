@@ -403,8 +403,8 @@ function transferConversation(skillId) {
 function retrieveSkill() {
 
 //    var baseURI = 'va-a.ac.liveperson.net' // Alpha
-    var baseURI = 'va.ac.liveperson.net' // US
-//    var baseURI = 'lo.ac.liveperson.net' // UK
+    var baseURI = 'va.ac.liveperson.net' // US Production
+//    var baseURI = 'lo.ac.liveperson.net' // UK Production
 
 
     // Get a list of all the skills
