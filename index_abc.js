@@ -133,6 +133,7 @@ function processResponse(err, response) {
 
                     if (typeof response.output.abc !== "undefined") {
                         metadata = response.output.abc.metadata;
+                        console.log('ABC metadata   : ' + metadata); // Post the answer to the console, truncated for readability.
                         sendABCStructuredContent(answer, metadata);
                     } else {
                         sendStructuredContent(answer);
