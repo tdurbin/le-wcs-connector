@@ -1,15 +1,16 @@
 /***********************************
  * Super Awesome Connector for WCS *
  ***********************************/
-
 require('dotenv').config();
 
 // This section is for the deployment of the connector on heroku
 // You can comment this out when running locally.
 // *************************************************************
 var http = require('http');
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+http.createServer(function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
     res.write('Super Awesome Connector for WCS');
     res.end();
 }).listen(process.env.PORT || 6000);
@@ -129,16 +130,12 @@ function processResponse(err, response) {
                 // If structured content is detected, call the sendStructuredContent function.
                 if (answer.startsWith("{")) {
 
-                  if (typeof response.output.abc !== "undefined") {
-                    metadata = response.output.abc.metadata;
-                    console.log('ABC MetaData   : ' + metadata);
-                    sendABCStructuredContent(answer, metadata);
-                  }
-                  else {
-                    metadata = response.output.abc.metadata;
-                    console.log('ABC MetaData   : ' + metadata);
-                    sendStructuredContent(answer);
-                  }
+                    if (typeof response.output.abc !== "undefined") {
+                        metadata = response.output.abc.metadata;
+                        sendABCStructuredContent(answer, metadata);
+                    } else {
+                        sendStructuredContent(answer);
+                    }
                 }
 
                 // Else if line breaks in plain text messsage are detected, send as snippets.
@@ -289,7 +286,6 @@ function sendABCStructuredContent(answer, metadata) {
     console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
     abc_metadata = JSON.parse(metadata);
-    console.log('ABC metadata   : ' + abc_metadata);
 
     echoAgent.publishEvent({
         dialogId: dialogID,
@@ -297,7 +293,13 @@ function sendABCStructuredContent(answer, metadata) {
             type: 'RichContentEvent',
             content: sc_answer
         }
-    }, null, abc_metadata);
+    }, null, abc_metadata, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
+
 }
 
 // This function initiates the snippet callback function.
