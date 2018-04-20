@@ -1,7 +1,8 @@
 /***********************************
  * Super Awesome Connector for WCS *
  ***********************************/
-require('dotenv').config();
+
+// require('dotenv').config();
 
 // This section is for the deployment of the connector on heroku
 // You can comment this out when running locally.
@@ -15,7 +16,7 @@ http.createServer(function(req, res) {
     res.end();
 }).listen(process.env.PORT || 6000);
 
-// ping heroku every 10 minutes to keep the connector running
+// ping heroku every 10 minutes to keep the connector alive
 setInterval(function() {
     http.get("http://td-wcs-connector.herokuapp.com");
 }, 600000);
@@ -260,6 +261,11 @@ function sendPlainText(answer) {
             contentType: 'text/plain',
             message: answer
         }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
     });
 
 }
@@ -275,6 +281,11 @@ function sendStructuredContent(answer) {
         event: {
             type: 'RichContentEvent',
             content: sc_answer
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
         }
     });
 
@@ -333,6 +344,11 @@ function sendMySnippet(snippet, item) {
             type: 'ContentEvent',
             contentType: 'text/plain',
             message: snippet
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
         }
     });
 
