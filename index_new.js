@@ -257,7 +257,7 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
             });
             greenlight = 0;
         }
-    }, 200); //Pause for 200 milliseconds so only the last utterance from the customer is processed.
+    }, 100); //Pause for 200 milliseconds so only the last utterance from the customer is processed.
 
 });
 
