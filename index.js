@@ -2,19 +2,21 @@
  * Super Awesome Connector for WCS *
  ***********************************/
 
-require('dotenv').config();
+// require('dotenv').config();
 
 // This section is for the deployment of the connector on heroku
 // You can comment this out when running locally.
 // *************************************************************
 var http = require('http');
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+http.createServer(function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
     res.write('Super Awesome Connector for WCS');
     res.end();
 }).listen(process.env.PORT || 6000);
 
-// ping heroku every 10 minutes to keep the connector running
+// ping heroku every 10 minutes to keep the connector alive
 setInterval(function() {
     http.get("http://le-wcs-connector.herokuapp.com");
 }, 600000);
@@ -28,6 +30,8 @@ var context = {};
 var dialogID = "";
 var answer = "";
 var sc_answer = "";
+var metadata = "";
+var abc_metadata = "";
 var typingdelay = parseInt(process.env.TYPING_DELAY, 10); // Convert the TYPING_DELAY env. variable to an integer
 var snippetdelay = parseInt(process.env.SNIPPET_DELAY, 10); // Convert the ANSWER_DELAY env. variable to an integer
 var closedelay = parseInt(process.env.CLOSE_DELAY, 10); // Convert the CLOSE_DELAY env. variable to an integer
@@ -127,8 +131,13 @@ function processResponse(err, response) {
                 // If structured content is detected, call the sendStructuredContent function.
                 if (answer.startsWith("{")) {
 
-                    sendStructuredContent(answer);
-
+                    if (typeof response.output.abc !== "undefined") {
+                        metadata = response.output.abc.metadata;
+                        // console.log('ABC metadata   : ' + metadata); // Post the answer to the console, truncated for readability.
+                        sendABCStructuredContent(answer, metadata);
+                    } else {
+                        sendStructuredContent(answer);
+                    }
                 }
 
                 // Else if line breaks in plain text messsage are detected, send as snippets.
@@ -253,14 +262,19 @@ function sendPlainText(answer) {
             contentType: 'text/plain',
             message: answer
         }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
     });
 
 }
 
-// This function ends a Structured Content message to the UMS.
+// This function sends a Structured Content message to the UMS.
 function sendStructuredContent(answer) {
 
-    console.log('Message format : Structured content');
+    console.log('Message format : LP Structured Content');
     sc_answer = JSON.parse(answer);
 
     echoAgent.publishEvent({
@@ -268,6 +282,33 @@ function sendStructuredContent(answer) {
         event: {
             type: 'RichContentEvent',
             content: sc_answer
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
+
+}
+
+// This function sends an ABC Structured Content message to the UMS.
+function sendABCStructuredContent(answer, metadata) {
+
+    console.log('Message format : ABC Structured Content');
+    sc_answer = JSON.parse(answer);
+    abc_metadata = JSON.parse(metadata);
+
+    echoAgent.publishEvent({
+        dialogId: dialogID,
+        event: {
+            type: 'RichContentEvent',
+            content: sc_answer
+        }
+    }, null, abc_metadata, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
         }
     });
 
@@ -304,6 +345,11 @@ function sendMySnippet(snippet, item) {
             type: 'ContentEvent',
             contentType: 'text/plain',
             message: snippet
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
         }
     });
 
@@ -357,8 +403,13 @@ function transferConversation(skillId) {
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
 function retrieveSkill() {
 
+//    var baseURI = 'va-a.ac.liveperson.net' // Alpha
+    var baseURI = 'va.ac.liveperson.net' // US Production
+//    var baseURI = 'lo.ac.liveperson.net' // UK Production
+
+
     // Get a list of all the skills
-    var url = 'https://va-a.acr.liveperson.net/api/account/' + accountId + '/configuration/le-users/skills';
+    var url = 'https://' + baseURI + '/api/account/' + accountId + '/configuration/le-users/skills';
     request.get({
         url: url,
         oauth: oauth,
