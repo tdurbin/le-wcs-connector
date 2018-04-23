@@ -239,14 +239,14 @@ function processResponse(err, response, dialogID) {
 // This code sends the customer message to the bot.
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
 
-    greenlight = 1;
+//    greenlight = 1;
 
     // Assuming undefined context will trigger a new conversation
     console.log("Sending message: " + contentEvent.message);
 
     setTimeout(() => {
 
-        if(greenlight){
+//        if(greenlight){
             conversation.message({
                 input: {
                     text: contentEvent.message
@@ -254,10 +254,10 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
                 context : umsDialogToWatsonContext[contentEvent.dialogId]
             }, (err, res) => {
                 processResponse(err, res, contentEvent.dialogId);
-            });
-            greenlight = 0;
+//            });
+//            greenlight = 0;
         }
-    }, 100); //Pause for 200 milliseconds so only the last utterance from the customer is processed.
+    }, 100); //Pause for 100 milliseconds so only the last utterance from the customer is processed.
 
 });
 
