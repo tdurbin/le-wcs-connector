@@ -240,7 +240,6 @@ function processResponse(err, response, dialogID) {
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
-    dialogID = contentEvent.dialogId;
 
     // Assuming undefined context will trigger a new conversation
     console.log("Sending message: " + contentEvent.message);
