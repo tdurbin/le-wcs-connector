@@ -415,8 +415,8 @@ function transferConversation(skillId) {
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
 function retrieveSkill() {
 
-//    var baseURI = 'va-a.ac.liveperson.net' // Alpha
-    var baseURI = 'va.ac.liveperson.net' // US Production
+    var baseURI = 'va-a.ac.liveperson.net' // Alpha
+//    var baseURI = 'va.ac.liveperson.net' // US Production
 //    var baseURI = 'lo.ac.liveperson.net' // UK Production
 
 
