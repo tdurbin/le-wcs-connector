@@ -2,9 +2,9 @@
   "name": "le_wcs_connector",
   "version": "1.0.0",
   "description": "le_wcs_connector",
-  "main": "index_abc.js",
+  "main": "index_new.js",
   "scripts": {
-    "start": "node index_abc.js"
+    "start": "node index_new.js"
   },
   "author": "tdurbin",
   "dependencies": {
