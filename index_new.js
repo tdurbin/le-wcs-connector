@@ -42,6 +42,7 @@ var allSkills = [];
 var skillName = "";
 var skillId = 0;
 var accountId = process.env.LP_ACCOUNT_ID;
+var greenlight = 1;
 
 // Watson Conversation credentials.
 var conversation = new ConversationV1({
@@ -237,17 +238,28 @@ function processResponse(err, response, dialogID) {
 
 // This code sends the customer message to the bot.
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
-    dialogID = contentEvent.dialogId;
-    conversation.message({
-        input: {
-            text: contentEvent.message
-        },
-        context: umsDialogToWatsonContext[contentEvent.dialogId]
-    }, (err, res) => {
-        processResponse(err, res, contentEvent.dialogId);
-    });
 
-    console.log('Inbound message: ' + contentEvent.message);
+    greenlight = 1;
+    dialogID = contentEvent.dialogId;
+
+    // Assuming undefined context will trigger a new conversation
+    console.log("Sending message: " + contentEvent.message);
+
+    setTimeout(() => {
+
+        if(greenlight){
+            conversation.message({
+                input: {
+                    text: contentEvent.message
+                },
+                context : umsDialogToWatsonContext[contentEvent.dialogId]
+            }, (err, res) => {
+                processResponse(err, res, contentEvent.dialogId);
+            });
+            greenlight = 0;
+        }
+    }, 200); //Pause for 200 milliseconds so only the last utterance from the customer is processed.
+
 });
 
 /*******************************************************************
