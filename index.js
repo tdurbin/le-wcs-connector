@@ -18,7 +18,7 @@ http.createServer(function(req, res) {
 
 // ping heroku every 10 minutes to keep the connector alive
 setInterval(function() {
-    http.get("http://telco-wcs-connector.herokuapp.com");
+    http.get("http://mels-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
 
