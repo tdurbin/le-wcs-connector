@@ -241,7 +241,7 @@ function processResponse(err, response, dialogID) {
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
-    dialogID = contentEvent.dialogId;
+//    dialogID = contentEvent.dialogId;
 
     console.log("Sending message: " + contentEvent.message);
     message = contentEvent.message;
@@ -255,7 +255,7 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
                 },
                 context : umsDialogToWatsonContext[contentEvent.dialogId]
             }, (err, res) => {
-                processResponse(err, res, dialogID);
+                processResponse(err, res, contentEvent.dialogId);
             });
             greenlight = 0;
         }
