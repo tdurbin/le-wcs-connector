@@ -2,9 +2,9 @@
   "name": "le_wcs_connector",
   "version": "1.0.0",
   "description": "le_wcs_connector",
-  "main": "index.js",
+  "main": "index_ums.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index_ums.js"
   },
   "author": "tdurbin",
   "dependencies": {
