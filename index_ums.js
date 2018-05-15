@@ -27,8 +27,6 @@ var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 var MyCoolAgent = require('./MyCoolAgent');
 var request = require('request');
 var umsDialogToWatsonContext = {};
-//var context = {};
-//var dialogID = "";
 var answer = "";
 var sc_answer = "";
 var metadata = "";
@@ -81,7 +79,6 @@ function processResponse(err, response, dialogID) {
     }
 
     umsDialogToWatsonContext[dialogID] = response.context;
-//    context = response.context;
 
     if (response.output.text.length != 0) {
 
@@ -241,7 +238,6 @@ function processResponse(err, response, dialogID) {
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
-//    convDialogID = contentEvent.dialogId;
 
     console.log("Sending message: " + contentEvent.message);
     message = contentEvent.message;
