@@ -18,7 +18,7 @@ http.createServer(function(req, res) {
 
 // ping heroku every 10 minutes to keep the connector alive
 setInterval(function() {
-    http.get("http://ce-connector.herokuapp.com");
+    http.get("http://travel-wcs-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
 
@@ -26,8 +26,7 @@ var prompt = require('prompt-sync')();
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 var MyCoolAgent = require('./MyCoolAgent');
 var request = require('request');
-var context = {};
-var dialogID = "";
+var umsDialogToWatsonContext = {};
 var answer = "";
 var sc_answer = "";
 var metadata = "";
@@ -73,13 +72,13 @@ var oauth = {
 };
 
 // Process the conversation response.
-function processResponse(err, response) {
+function processResponse(err, response, dialogID) {
     if (err) {
         console.error(err); // Oops - something went wrong.
         return;
     }
 
-    context = response.context;
+    umsDialogToWatsonContext[dialogID] = response.context;
 
     if (response.output.text.length != 0) {
 
@@ -135,9 +134,9 @@ function processResponse(err, response) {
                     if (typeof response.output.abc !== "undefined") {
                         metadata = response.output.abc.metadata;
                         // console.log('ABC metadata   : ' + metadata); // Post the answer to the console, truncated for readability.
-                        sendABCStructuredContent(answer, metadata);
+                        sendABCStructuredContent(answer, metadata, dialogID);
                     } else {
-                        sendStructuredContent(answer);
+                        sendStructuredContent(answer, dialogID);
                     }
                 }
 
@@ -150,17 +149,17 @@ function processResponse(err, response) {
                     // Send the first snippet directly so there is no delay after typing indicator.
                     item = 0;
                     snippet = answerarray[item];
-                    sendMySnippet(snippet, item);
+                    sendMySnippet(snippet, item, dialogID);
                     // Subsequent snippets are then sent via a callback function with the pre-defined snippet delay.
                     item = 1;
-                    sendResponseSnippet(answerarray, item, 0, function(err, resp) {});
+                    sendResponseSnippet(answerarray, item, dialogID, 0, function(err, resp) {});
 
                 }
 
                 // Otherwise the response should just be sent a plain text.
                 else {
 
-                    sendPlainText(answer);
+                    sendPlainText(answer, dialogID);
 
                 }
 
@@ -174,7 +173,7 @@ function processResponse(err, response) {
                         // If a close action is detected, close the conversation after a delay.
                         if (response.output.action.name === "close") {
                             setTimeout(function() { // Apply timeout function so customer can see the close message before the exit survey is displayed.
-                                closeConversation();
+                                closeConversation(dialogID);
                             }, closedelay) // delay in milliseconds before closing
                         }
 
@@ -214,17 +213,17 @@ function processResponse(err, response) {
                                 var answerarray = [transferMessageOne, transferMessageTwo];
 
                                 // Send operating hours info message snippets after regular transfer message.
-                                sendResponseSnippet(answerarray, 0, function(err, resp) {});
+                                sendResponseSnippet(answerarray, 0, dialogID, function(err, resp) {});
 
                                 // Then transfer the conversation to the specified skill after all messages have been sent.
                                 waittime = snippetdelay * 3;
                                 setTimeout(function() {
-                                    transferConversation(skillId);
+                                    transferConversation(skillId, dialogID);
                                 }, waittime);
 
                             } else {
                                 console.log('Current time   : ' + currentHour + ':' + currentMins);
-                                transferConversation(skillId);
+                                transferConversation(skillId, dialogID);
 
                             }
                         }
@@ -239,7 +238,6 @@ function processResponse(err, response) {
 echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
-    dialogID = contentEvent.dialogId;
 
     console.log("Sending message: " + contentEvent.message);
     message = contentEvent.message;
@@ -251,10 +249,13 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
                 input: {
                     text: message
                 },
-                context : context
-            }, processResponse);
+                context : umsDialogToWatsonContext[contentEvent.dialogId]
+            }, (err, res) => {
+                processResponse(err, res, contentEvent.dialogId);
+            });
             greenlight = 0;
         }
+
     }, 100); //Pause for 100 milliseconds so only the last utterance from the customer is processed.
 
 });
@@ -264,7 +265,7 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
  *******************************************************************/
 
 // This function sends a Plain Text message to the UMS.
-function sendPlainText(answer) {
+function sendPlainText(answer, dialogID) {
 
     console.log('Message format : Plain text');
     echoAgent.publishEvent({
@@ -284,7 +285,7 @@ function sendPlainText(answer) {
 }
 
 // This function sends a Structured Content message to the UMS.
-function sendStructuredContent(answer) {
+function sendStructuredContent(answer, dialogID) {
 
     console.log('Message format : LP Structured Content');
     sc_answer = JSON.parse(answer);
@@ -305,7 +306,7 @@ function sendStructuredContent(answer) {
 }
 
 // This function sends an ABC Structured Content message to the UMS.
-function sendABCStructuredContent(answer, metadata) {
+function sendABCStructuredContent(answer, metadata, dialogID) {
 
     console.log('Message format : ABC Structured Content');
     sc_answer = JSON.parse(answer);
@@ -327,28 +328,28 @@ function sendABCStructuredContent(answer, metadata) {
 }
 
 // This function initiates the snippet callback function.
-function sendResponseSnippet(answerarray, item) {
+function sendResponseSnippet(answerarray, item, dialogID) {
 
-    callbackSnippet(answerarray, item, function(err, resp) {});
+    callbackSnippet(answerarray, item, dialogID, function(err, resp) {});
 
 }
 
 // This function recurses through the message snippet array and calls the sendMySnippet function.
-function callbackSnippet(answerarray, item, callback) {
+function callbackSnippet(answerarray, item, dialogID, callback) {
 
     snippet = answerarray[item];
     setTimeout(function() {
-        sendMySnippet(snippet, item);
+        sendMySnippet(snippet, item, dialogID);
         item = item + 1;
         if (item < answerarray.length) {
-            callbackSnippet(answerarray, item, callback);
+            callbackSnippet(answerarray, item, dialogID, callback);
         }
     }, snippetdelay);
 
 }
 
 // This function simply sends each snippet!
-function sendMySnippet(snippet, item) {
+function sendMySnippet(snippet, item, dialogID) {
 
     console.log('     Snippet ' + item + ' : -> ' + snippet.substring(0, 47) + '...');
     echoAgent.publishEvent({
@@ -368,7 +369,7 @@ function sendMySnippet(snippet, item) {
 }
 
 // This function closes an active conversation.
-function closeConversation() {
+function closeConversation(dialogID) {
 
     echoAgent.updateConversationField({
         conversationId: dialogID,
@@ -381,13 +382,14 @@ function closeConversation() {
             console.log(err);
         } else {
             console.log("*** Conversation has been closed ***");
+            delete umsDialogToWatsonContext[dialogID];
         }
     });
 
 }
 
 // This function transfers the active conversation to the specified skill.
-function transferConversation(skillId) {
+function transferConversation(skillId, dialogID) {
 
     echoAgent.updateConversationField({
         conversationId: dialogID,
@@ -415,9 +417,9 @@ function transferConversation(skillId) {
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
 function retrieveSkill() {
 
-//    var baseURI = 'va-a.ac.liveperson.net' // Alpha
+    var baseURI = 'va-a.ac.liveperson.net' // Alpha
 //    var baseURI = 'va.ac.liveperson.net' // US Production
-    var baseURI = 'lo.ac.liveperson.net' // UK Production
+//    var baseURI = 'lo.ac.liveperson.net' // UK Production
 
 
     // Get a list of all the skills
