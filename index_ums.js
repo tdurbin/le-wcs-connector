@@ -74,7 +74,7 @@ var oauth = {
 };
 
 // Process the conversation response.
-function processResponse(err, response, dialogID) {
+function processResponse(err, response) {
     if (err) {
         console.error(err); // Oops - something went wrong.
         return;
@@ -251,11 +251,11 @@ echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
         if(greenlight){
             conversation.message({
                 input: {
-                    text: contentEvent.message
+                    text: message
                 },
                 context : umsDialogToWatsonContext[contentEvent.dialogId]
             }, (err, res) => {
-                processResponse(err, res, umsDialogToWatsonContext[contentEvent.dialogId]);
+                processResponse(err, res);
             });
             greenlight = 0;
         }
