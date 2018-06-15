@@ -1,6 +1,5 @@
 /*****************************************************
  * LivePerson EMEA SC Connector for Watson Assistant *
- *****************************************************/
 
 // require('dotenv').config();
 
@@ -28,6 +27,8 @@ setInterval(function() {
     https.get("http://td-wa-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
+
+*****************************************************/
 
 var prompt = require('prompt-sync')();
 var watson = require('watson-developer-cloud');
