@@ -17,13 +17,13 @@ http.createServer(function(req, res) {
 
 // ping the connector every 10 minutes to keep the app alive
 setInterval(function() {
-    http.get("http://td-wcs-connector.herokuapp.com");
+    http.get("http://td-wa-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
 
 // var prompt = require('prompt-sync')();
 var watson = require('watson-developer-cloud');
-var MyCoolAgent = require('./MyCoolAgent');
+var myCoolAgent = require('./myCoolAgent');
 var request = require('request');
 var umsDialogToWatsonContext = {};
 var answer = "";
@@ -50,7 +50,7 @@ var assistant = new watson.AssistantV1({
 });
 
 // LE bot agent credentials.
-var echoAgent = new MyCoolAgent({
+var echoAgent = new myCoolAgent({
     accountId: process.env.LP_ACCOUNT_ID,
     username: process.env.LP_ACCOUNT_USER,
     appKey: process.env.LP_ACCOUNT_APP_KEY,
@@ -231,7 +231,7 @@ function processResponse(err, response, dialogID) {
 }
 
 // This code sends the customer message to the bot.
-echoAgent.on('MyCoolAgent.ContentEvent', (contentEvent) => {
+echoAgent.on('myCoolAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
 
