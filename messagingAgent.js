@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * This demo try to use most of the API calls of the messaging agent api. It:
+ * This messagingAgent code utilises use most of the Messaging Agent API calls...
  *
  * 1) Registers the agent as online
  * 2) Accepts any routing task (== ring)
