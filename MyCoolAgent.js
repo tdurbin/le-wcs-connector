@@ -7,19 +7,19 @@
  * 2) Accepts any routing task (== ring)
  * 3) Publishes to the conversation the consumer info when it gets new conversation
  * 4) Gets the content of the conversation
- * 5) Emit 'MyCoolAgent.ContentEvent' to let the developer handle contentEvent responses
+ * 5) Emit 'myCoolAgent.ContentEvent' to let the developer handle contentEvent responses
  * 6) Mark as "read" the handled messages
  *
  */
 
 const Agent = require('node-agent-sdk').Agent;
 
-class MyCoolAgent extends Agent {
+class myCoolAgent extends Agent {
     constructor(conf) {
         super(conf);
         this.conf = conf;
         this.init();
-        this.CONTENT_NOTIFICATION = 'MyCoolAgent.ContentEvent';
+        this.CONTENT_NOTIFICATION = 'myCoolAgent.ContentEvent';
     }
 
     init() {
@@ -143,4 +143,4 @@ class MyCoolAgent extends Agent {
     }
 }
 
-module.exports = MyCoolAgent;
+module.exports = myCoolAgent;
