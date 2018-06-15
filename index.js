@@ -1,6 +1,6 @@
-/***********************************
- * Super Awesome Connector for WCS *
- ***********************************/
+/************************************************
+ * Super Awesome Connector for Watson Assistant *
+ ************************************************/
 
 // require('dotenv').config();
 
@@ -18,7 +18,7 @@ http.createServer(function(req, res) {
 
 // ping heroku every 10 minutes to keep the connector alive
 setInterval(function() {
-    http.get("http://td-wcs-connector.herokuapp.com");
+    http.get("http://td-wa-connector.herokuapp.com");
 }, 600000);
 // *************************************************************
 
