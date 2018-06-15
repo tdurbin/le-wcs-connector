@@ -18,7 +18,7 @@
 
 const https = require('https');
 https.createServer(function(req, res) {
-    res.writeHead(200);
+    res.writeHead(200, {'Content-Type': 'text/plain'});
     res.write('LivePerson EMEA SC Connector for Watson Assistant');
     res.end();
 }).listen(process.env.PORT);
