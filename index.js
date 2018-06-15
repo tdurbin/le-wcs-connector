@@ -16,7 +16,7 @@
 //     res.end();
 // }).listen(process.env.PORT || 6000);
 
-var http = require('https');
+const https = require('https');
 https.createServer(function(req, res) {
     res.writeHead(200);
     res.write('LivePerson EMEA SC Connector for Watson Assistant');
