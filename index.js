@@ -7,14 +7,21 @@
 // This section is for the deployment of the connector on heroku
 // You can comment this out when running locally.
 // *************************************************************
-var http = require('http');
-http.createServer(function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/plain'
-    });
+// var http = require('http');
+// http.createServer(function(req, res) {
+//     res.writeHead(200, {
+//         'Content-Type': 'text/plain'
+//     });
+//     res.write('LivePerson EMEA SC Connector for Watson Assistant');
+//     res.end();
+// }).listen(process.env.PORT || 6000);
+
+var http = require('https');
+https.createServer(function(req, res) {
+    res.writeHead(200);
     res.write('LivePerson EMEA SC Connector for Watson Assistant');
     res.end();
-}).listen(process.env.PORT || 6000);
+}).listen(process.env.PORT);
 
 // ping heroku every 10 minutes to keep the connector alive
 setInterval(function() {
