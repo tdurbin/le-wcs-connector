@@ -1,6 +1,6 @@
-/************************************************
- * Super Awesome Connector for Watson Assistant *
- ************************************************/
+/*****************************************************
+ * LivePerson EMEA SC Connector for Watson Assistant *
+ *****************************************************/
 
 // require('dotenv').config();
 
@@ -12,7 +12,7 @@ http.createServer(function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/plain'
     });
-    res.write('Super Awesome Connector for WCS');
+    res.write('LivePerson EMEA SC Connector for Watson Assistant');
     res.end();
 }).listen(process.env.PORT || 6000);
 
