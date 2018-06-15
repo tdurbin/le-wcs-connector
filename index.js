@@ -23,7 +23,7 @@ setInterval(function() {
 
 // var prompt = require('prompt-sync')();
 var watson = require('watson-developer-cloud');
-var myCoolAgent = require('./myCoolAgent');
+var messagingAgent = require('./messagingAgent');
 var request = require('request');
 var umsDialogToWatsonContext = {};
 var answer = "";
@@ -50,7 +50,7 @@ var assistant = new watson.AssistantV1({
 });
 
 // LE bot agent credentials.
-var echoAgent = new myCoolAgent({
+var echoAgent = new messagingAgent({
     accountId: process.env.LP_ACCOUNT_ID,
     username: process.env.LP_ACCOUNT_USER,
     appKey: process.env.LP_ACCOUNT_APP_KEY,
@@ -231,7 +231,7 @@ function processResponse(err, response, dialogID) {
 }
 
 // This code sends the customer message to the bot.
-echoAgent.on('myCoolAgent.ContentEvent', (contentEvent) => {
+echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
 

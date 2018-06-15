@@ -1,25 +1,25 @@
 'use strict';
 
 /*
- * This demo try to use most of the API calls of the mssaging agent api. It:
+ * This demo try to use most of the API calls of the messaging agent api. It:
  *
  * 1) Registers the agent as online
  * 2) Accepts any routing task (== ring)
  * 3) Publishes to the conversation the consumer info when it gets new conversation
  * 4) Gets the content of the conversation
- * 5) Emit 'myCoolAgent.ContentEvent' to let the developer handle contentEvent responses
+ * 5) Emit 'messagingAgent.ContentEvent' to let the developer handle contentEvent responses
  * 6) Mark as "read" the handled messages
  *
  */
 
 const Agent = require('node-agent-sdk').Agent;
 
-class myCoolAgent extends Agent {
+class messagingAgent extends Agent {
     constructor(conf) {
         super(conf);
         this.conf = conf;
         this.init();
-        this.CONTENT_NOTIFICATION = 'myCoolAgent.ContentEvent';
+        this.CONTENT_NOTIFICATION = 'messagingAgent.ContentEvent';
     }
 
     init() {
@@ -143,4 +143,4 @@ class myCoolAgent extends Agent {
     }
 }
 
-module.exports = myCoolAgent;
+module.exports = messagingAgent;
