@@ -21,7 +21,7 @@ setInterval(function() {
 }, 600000);
 // *************************************************************
 
-var prompt = require('prompt-sync')();
+// var prompt = require('prompt-sync')();
 var watson = require('watson-developer-cloud');
 var MyCoolAgent = require('./MyCoolAgent');
 var request = require('request');
@@ -42,7 +42,7 @@ var skillId = 0;
 var accountId = process.env.LP_ACCOUNT_ID;
 var greenlight = 1;
 
-// Watson Conversation credentials.
+// Watson Assistant credentials.
 var assistant = new watson.AssistantV1({
     username: process.env.WCS_USERNAME,
     password: process.env.WCS_PASSWORD,
