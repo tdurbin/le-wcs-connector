@@ -40,8 +40,8 @@ var waittime = 0;
 var item = 0;
 var snippet = [];
 var allSkills = [];
-var skillName = "";
-var skillId = 0;
+// var skillName = "";
+// var skillId = 0;
 var accountId = process.env.LP_ACCOUNT_ID;
 var greenlight = 1;
 
@@ -188,8 +188,8 @@ function processResponse(err, response, dialogID) {
                             var closeHour = process.env.OPERATING_HOURS_END_HH;
                             var closeMins = process.env.OPERATING_HOURS_END_MM;
                             var off_hours = true; // Assume off hours is true until it is evaluated as false
-                            skillName = response.output.action.skill; // Set skillName to the value in the JSON response
-                            skillId = convertSkill(); // Convert skillName to skillID
+                            var skillName = response.output.action.skill; // Set skillName to the value in the JSON response
+                            var skillId = convertSkill(skillName); // Convert skillName to skillId
 
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
@@ -446,13 +446,12 @@ function retrieveSkills() {
     }, function(e, r, b) {
         allSkills = b;
         console.log('*** Skills IDs and Skill Names successfully retrieved ***');
-
     });
 
 }
 
 // This function converts a Skill Name to a Skill ID.
-function convertSkill() {
+function convertSkill(skillName) {
 
     var found = 0;
     for (var i = 0; i < allSkills.length; i++) {
