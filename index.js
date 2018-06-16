@@ -28,7 +28,6 @@ var watson = require('watson-developer-cloud');
 var messagingAgent = require('./messagingAgent');
 var request = require('request');
 var umsDialogToWatsonContext = {};
-var baseURI = "";
 var answer = "";
 var sc_answer = "";
 var metadata = "";
@@ -423,15 +422,15 @@ function retrieveBaseURI() {
             'Content-Type': 'application/json'
         }
     }, function(e, r, b) {
-        baseURI = b.baseURI;
+        var baseURI = b.baseURI;
         console.log('*** baseURI for accountConfigReadWrite service: ' + baseURI + ' ***');
-        retrieveSkills(); // Now can the function to retrieve the Skill ID's and corresponding Skill Names
+        retrieveSkills(baseURI); // Now can the function to retrieve the Skill ID's and corresponding Skill Names
     });
 
 }
 
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
-function retrieveSkills() {
+function retrieveSkills(baseURI) {
 
     var url = 'https://' + baseURI + '/api/account/' + accountId + '/configuration/le-users/skills';
     request.get({
