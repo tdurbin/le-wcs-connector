@@ -40,10 +40,8 @@ var waittime = 0;
 var item = 0;
 var snippet = [];
 var allSkills = [];
-// var skillName = "";
-// var skillId = 0;
 var accountId = process.env.LP_ACCOUNT_ID;
-var greenlight = 1;
+// var greenlight = 1;
 
 // Watson Assistant credentials.
 var assistant = new watson.AssistantV1({
@@ -236,7 +234,7 @@ function processResponse(err, response, dialogID) {
 // This code sends the customer message to the bot.
 echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
 
-    greenlight = 1;
+    var greenlight = 1;
 
     console.log("Sending message: " + contentEvent.message);
     message = contentEvent.message;
@@ -426,7 +424,7 @@ function retrieveBaseURI() {
         }
     }, function(e, r, b) {
         baseURI = b.baseURI;
-        console.log('*** baseURI for accountConfigReadWrite successfully retrieved: ' + baseURI + ' ***');
+        console.log('*** baseURI for accountConfigReadWrite service: ' + baseURI + ' ***');
         retrieveSkills(); // Now can the function to retrieve the Skill ID's and corresponding Skill Names
     });
 
