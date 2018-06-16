@@ -429,7 +429,7 @@ function retrieveBaseURI() {
         baseURI = b.baseURI;
         console.log('*** baseURI for accountConfigReadWrite successfully retrieved ***');
         console.log('*** baseURI = ' + baseURI + ' ***');
-    });
+    }, retrieveSkill);
 
 }
 
@@ -478,8 +478,8 @@ function convertSkill() {
 echoAgent.on('connected', data => {
     console.log('*** Retrieving baseURI for accountConfigReadWrite service from account ' + accountId + ' ***');
     retrieveBaseURI();
-    console.log('*** Retrieving skills from account ' + accountId + ' ***');
-    retrieveSkill();
+//    console.log('*** Retrieving skills from account ' + accountId + ' ***');
+//    retrieveSkill();
 });
 
 /*********************************** EOF ***********************************/
