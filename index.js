@@ -41,7 +41,7 @@ var item = 0;
 var snippet = [];
 var allSkills = [];
 var accountId = process.env.LP_ACCOUNT_ID;
-// var greenlight = 1;
+var greenlight = 1;
 
 // Watson Assistant credentials.
 var assistant = new watson.AssistantV1({
@@ -234,7 +234,7 @@ function processResponse(err, response, dialogID) {
 // This code sends the customer message to the bot.
 echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
 
-    var greenlight = 1;
+    greenlight = 1;
 
     console.log("Sending message: " + contentEvent.message);
     message = contentEvent.message;
