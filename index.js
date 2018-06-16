@@ -436,7 +436,7 @@ function retrieveSkill() {
         console.log('*** baseURI = ' + baseURI + ' ***');
     });
 
-    // Get a list of all the skills
+    // Now get a list of all the skills in the account using the correct baseURI
     var url = 'https://' + baseURI + '/api/account/' + accountId + '/configuration/le-users/skills';
     request.get({
         url: url,
