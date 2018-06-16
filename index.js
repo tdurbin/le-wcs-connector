@@ -428,7 +428,9 @@ function retrieveSkill() {
         oauth: oauth,
         json: true,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         }
     }, function(e, r, b) {
         baseURI = b;
