@@ -426,7 +426,7 @@ function retrieveBaseURI() {
             'Content-Type': 'application/json'
         }
     }, function(e, r, b) {
-        baseURI = b;
+        baseURI = JSON.parse(b);
         console.log('*** baseURI for accountConfigReadWrite successfully retrieved ***');
         console.log('*** baseURI = ' + baseURI + ' ***');
     });
