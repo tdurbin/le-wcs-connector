@@ -429,12 +429,13 @@ function retrieveBaseURI() {
         baseURI = b.baseURI;
         console.log('*** baseURI for accountConfigReadWrite successfully retrieved ***');
         console.log('*** baseURI = ' + baseURI + ' ***');
-    }, retrieveSkill);
+        retrieveSkills();
+    });
 
 }
 
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
-function retrieveSkill() {
+function retrieveSkills() {
 
 //    var baseURI = 'va-a.ac.liveperson.net' // Alpha
 //    var baseURI = 'va.ac.liveperson.net' // US Production
