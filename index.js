@@ -413,10 +413,9 @@ function transferConversation(skillId, dialogID) {
 
 }
 
-
+// This function retrieves the baseURI for the 'accountConfigReadWrite' service from the LiveEngage account
 function retrieveBaseURI() {
 
-    // Get the baseURI for the 'accountConfigReadWrite' service
     var url = 'https://api.liveperson.net/api/account/' + accountId + '/service/accountConfigReadWrite/baseURI.json?version=1.0';
     request.get({
         url: url,
@@ -427,9 +426,8 @@ function retrieveBaseURI() {
         }
     }, function(e, r, b) {
         baseURI = b.baseURI;
-        console.log('*** baseURI for accountConfigReadWrite successfully retrieved ***');
-        console.log('*** baseURI = ' + baseURI + ' ***');
-        retrieveSkills();
+        console.log('*** baseURI for accountConfigReadWrite successfully retrieved: ' + baseURI + ' ***');
+        retrieveSkills(); // Now can the function to retrieve the Skill ID's and corresponding Skill Names
     });
 
 }
@@ -437,11 +435,6 @@ function retrieveBaseURI() {
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
 function retrieveSkills() {
 
-//    var baseURI = 'va-a.ac.liveperson.net' // Alpha
-//    var baseURI = 'va.ac.liveperson.net' // US Production
-//    var baseURI = 'lo.ac.liveperson.net' // UK Production
-
-    // Now get a list of all the skills in the account using the correct baseURI
     var url = 'https://' + baseURI + '/api/account/' + accountId + '/configuration/le-users/skills';
     request.get({
         url: url,
@@ -452,7 +445,7 @@ function retrieveSkills() {
         }
     }, function(e, r, b) {
         allSkills = b;
-        console.log('*** Skills successfully loaded ***');
+        console.log('*** Skills IDs and Skill Names successfully retrieved ***');
 
     });
 
@@ -476,11 +469,10 @@ function convertSkill() {
 
 }
 
+// This get's executed when the scripts starts...
 echoAgent.on('connected', data => {
-    console.log('*** Retrieving baseURI for accountConfigReadWrite service from account ' + accountId + ' ***');
+    // Call the retrieveBaseURI which in turn will load the skill array from the LiveEngage account
     retrieveBaseURI();
-//    console.log('*** Retrieving skills from account ' + accountId + ' ***');
-//    retrieveSkill();
 });
 
 /*********************************** EOF ***********************************/
