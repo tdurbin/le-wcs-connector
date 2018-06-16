@@ -414,10 +414,26 @@ function transferConversation(skillId, dialogID) {
 // This function retrieves all the Skill ID's and corresponding Skill Names and loads into an array.
 function retrieveSkill() {
 
-    var baseURI = 'va-a.ac.liveperson.net' // Alpha
+//    var baseURI = 'va-a.ac.liveperson.net' // Alpha
 //    var baseURI = 'va.ac.liveperson.net' // US Production
 //    var baseURI = 'lo.ac.liveperson.net' // UK Production
 
+    var baseURI = "";
+
+    // Get the baseURI for the 'accountConfigReadWrite' service
+    var url = 'https://api.liveperson.net/api/account/' + accountId + '/service/accountConfigReadWrite/baseURI.json?version=1.0';
+    request.get({
+        url: url,
+        oauth: oauth,
+        json: true,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }, function(e, r, b) {
+        baseURI = b;
+        console.log('*** baseURI for accountConfigReadWrite successfully retrieved ***');
+        console.log('*** baseURI = ' + baseURI + ' ***');
+    });
 
     // Get a list of all the skills
     var url = 'https://' + baseURI + '/api/account/' + accountId + '/configuration/le-users/skills';
