@@ -1,11 +1,11 @@
-/*****************************************************
- * LivePerson EMEA SC Connector for Watson Assistant *
- *****************************************************/
+// ****************************************************************
+// LivePerson EMEA Sales Consulting Connector for Watson Assistant.
+// ****************************************************************
 
 require('dotenv').config();
 
 // ****************************************************************
-// This section is for the deployment of the connector on heroku
+// This section is for the deployment of the connector on heroku.
 // You can comment this out when running locally.
 // ****************************************************************
 var http = require('http');
@@ -14,17 +14,15 @@ http.createServer(function(req, res) {
     res.write('LivePerson EMEA SC Connector for Watson Assistant');
     res.end();
 }).listen(process.env.PORT || 6000);
-// ****************************************************************
 
-// ****************************************************************
 // Ping the connector every 10 minutes to minimise socket timeouts
-// ****************************************************************
 var connectorName = process.env.CONNECTOR_NAME;
 var connectorURL = 'http://' + connectorName + '.herokuapp.com';
 setInterval(function() {
-//    http.get("http://rbm-wcs-connector.herokuapp.com");
     http.get(connectorURL);
 }, 600000);
+// ****************************************************************
+// End of heroku section.
 // ****************************************************************
 
 var watson = require('watson-developer-cloud');
@@ -35,9 +33,9 @@ var answer = "";
 var sc_answer = "";
 var metadata = "";
 var abc_metadata = "";
-var typingdelay = parseInt(process.env.TYPING_DELAY, 10); // Convert the TYPING_DELAY env. variable to an integer
-var snippetdelay = parseInt(process.env.SNIPPET_DELAY, 10); // Convert the ANSWER_DELAY env. variable to an integer
-var closedelay = parseInt(process.env.CLOSE_DELAY, 10); // Convert the CLOSE_DELAY env. variable to an integer
+var typingdelay = parseInt(process.env.TYPING_DELAY, 10); // Convert the TYPING_DELAY env. variable to an integer.
+var snippetdelay = parseInt(process.env.SNIPPET_DELAY, 10); // Convert the ANSWER_DELAY env. variable to an integer.
+var closedelay = parseInt(process.env.CLOSE_DELAY, 10); // Convert the CLOSE_DELAY env. variable to an integer.
 var waittime = 0;
 var item = 0;
 var snippet = [];
@@ -62,7 +60,7 @@ var echoAgent = new messagingAgent({
     accessTokenSecret: process.env.LP_ACCOUNT_ACCESS_TOKEN_SECRET
 });
 
-// API oauth1 credentials.
+// API OAuth1 credentials.
 var oauth = {
     consumer_key: process.env.LP_API_APP_KEY,
     consumer_secret: process.env.LP_API_SECRET,
@@ -70,13 +68,25 @@ var oauth = {
     token_secret: process.env.LP_API_ACCESS_TOKEN_SECRET
 };
 
-// This get's executed when the scripts starts...
+// ****************************************************************
+// This code gets executed on start-up when the bot connects.
+// ****************************************************************
+// Calls the retrieveBaseURI function which in turn calls the
+// retrieveSkills function (using the correct baseURI). This loads
+// an array with Skill IDs and the corresponding Skill Names from
+// LiveEngage which is used when transferring conversations.
+// ****************************************************************
 echoAgent.on('connected', data => {
-    // Call the retrieveBaseURI which in turn will load the skill array from the LiveEngage account
     retrieveBaseURI();
 });
 
-// This code sends the customer message to the bot.
+// ****************************************************************
+// This code gets executed when an inbound message is received.
+// ****************************************************************
+// Takes the last utterance sent by a customer and passes this to
+// Watson Assistant, then calls the processResponse function with
+// the response from Watson Assistant.
+// ****************************************************************
 echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
@@ -102,7 +112,9 @@ echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
 
 });
 
-// Process the conversation response.
+// ****************************************************************
+// This function processes each response from Watson Assistant.
+// ****************************************************************
 function processResponse(err, response, dialogID) {
     if (err) {
         console.error(err); // Oops - something went wrong.
@@ -162,10 +174,11 @@ function processResponse(err, response, dialogID) {
                 // If structured content is detected, call the sendStructuredContent function.
                 if (answer.startsWith("{")) {
 
+                    // If metadata is detected in the response then send as ABC Structured Content.
                     if (typeof response.output.abc !== "undefined") {
                         metadata = response.output.abc.metadata;
-                        // console.log('ABC metadata   : ' + metadata); // Post the answer to the console, truncated for readability.
                         sendABCStructuredContent(answer, metadata, dialogID);
+                    // Otherwise send as regular Structured Content.
                     } else {
                         sendStructuredContent(answer, dialogID);
                     }
@@ -194,7 +207,7 @@ function processResponse(err, response, dialogID) {
 
                 }
 
-                // Identify and then process any actions specified in the JSON response
+                // Identify and then process any actions specified in the JSON response.
                 if (typeof response.output.action !== "undefined") {
                     if (typeof response.output.action.name !== "undefined") {
 
@@ -205,7 +218,7 @@ function processResponse(err, response, dialogID) {
                         if (response.output.action.name === "close") {
                             setTimeout(function() { // Apply timeout function so customer can see the close message before the exit survey is displayed.
                                 closeConversation(dialogID);
-                            }, closedelay) // delay in milliseconds before closing
+                            }, closedelay) // delay in milliseconds before closing the conversation.
                         }
 
                         // If an escalate action is detected, transfer to the specified human skill.
@@ -219,9 +232,9 @@ function processResponse(err, response, dialogID) {
                             var openMins = process.env.OPERATING_HOURS_START_MM;
                             var closeHour = process.env.OPERATING_HOURS_END_HH;
                             var closeMins = process.env.OPERATING_HOURS_END_MM;
-                            var off_hours = true; // Assume off hours is true until it is evaluated as false
-                            var skillName = response.output.action.skill; // Set skillName to the value in the JSON response
-                            var skillId = convertSkill(skillName); // Convert skillName to skillId
+                            var off_hours = true; // Assume off hours is true until it is evaluated as false.
+                            var skillName = response.output.action.skill; // Set skillName to the value in the JSON response.
+                            var skillId = convertSkill(skillName); // Convert skillName to skillId.
 
                             console.log('Opening hours  : ' + openHour + ':' + openMins + ' - ' + closeHour + ':' + closeMins);
 
@@ -261,14 +274,13 @@ function processResponse(err, response, dialogID) {
                     }
                 }
             }
-        }, typingdelay) // delay in milliseconds for typing indication
+        }, typingdelay) // delay in milliseconds before removing the typing indicator.
     }
 }
 
-
-/*******************************************************************
- * Functions which are called by the main processResponse function *
- *******************************************************************/
+// ****************************************************************
+// Functions which are called by the main processResponse function.
+// ****************************************************************
 
 // This function sends a Plain Text message to the UMS.
 function sendPlainText(answer, dialogID) {
@@ -420,7 +432,7 @@ function transferConversation(skillId, dialogID) {
 
 }
 
-// This function retrieves the baseURI for the 'accountConfigReadWrite' service from the LiveEngage account
+// This function retrieves the baseURI for the 'accountConfigReadWrite' service from the LiveEngage account.
 function retrieveBaseURI() {
 
     var url = 'https://api.liveperson.net/api/account/' + accountId + '/service/accountConfigReadWrite/baseURI.json?version=1.0';
@@ -434,7 +446,7 @@ function retrieveBaseURI() {
     }, function(e, r, b) {
         var baseURI = b.baseURI;
         console.log('*** baseURI for accountConfigReadWrite service: ' + baseURI + ' ***');
-        retrieveSkills(baseURI); // Now can the function to retrieve the Skill ID's and corresponding Skill Names
+        retrieveSkills(baseURI); // Now call the function to retrieve the Skill ID's and corresponding Skill Names.
     });
 
 }
