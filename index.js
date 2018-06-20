@@ -19,8 +19,10 @@ http.createServer(function(req, res) {
 // ****************************************************************
 // Ping the connector every 10 minutes to minimise socket timeouts
 // ****************************************************************
+var herokuAppURL = 'http://' + process.env.CONNECTOR_NAME + '.herokuapp.com';
 setInterval(function() {
-    http.get("http://rbm-wcs-connector.herokuapp.com");
+//    http.get("http://rbm-wcs-connector.herokuapp.com");
+    http.get(herokuAppURL);
 }, 600000);
 // ****************************************************************
 
