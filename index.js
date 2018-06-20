@@ -19,10 +19,11 @@ http.createServer(function(req, res) {
 // ****************************************************************
 // Ping the connector every 10 minutes to minimise socket timeouts
 // ****************************************************************
-var herokuAppURL = 'http://' + process.env.CONNECTOR_NAME + '.herokuapp.com';
+var connectorName = process.env.CONNECTOR_NAME;
+var connectorURL = 'http://' + connectorName + '.herokuapp.com';
 setInterval(function() {
 //    http.get("http://rbm-wcs-connector.herokuapp.com");
-    http.get(herokuAppURL);
+    http.get(connectorURL);
 }, 600000);
 // ****************************************************************
 
@@ -68,6 +69,38 @@ var oauth = {
     token: process.env.LP_API_ACCESS_TOKEN,
     token_secret: process.env.LP_API_ACCESS_TOKEN_SECRET
 };
+
+// This get's executed when the scripts starts...
+echoAgent.on('connected', data => {
+    // Call the retrieveBaseURI which in turn will load the skill array from the LiveEngage account
+    retrieveBaseURI();
+});
+
+// This code sends the customer message to the bot.
+echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
+
+    greenlight = 1;
+
+    console.log("Sending message: " + contentEvent.message);
+    message = contentEvent.message;
+
+    setTimeout(function(){
+
+        if(greenlight){
+            assistant.message({
+                workspace_id: process.env.WCS_WORKSPACE_ID,
+                input: {text: message},
+                context : umsDialogToWatsonContext[contentEvent.dialogId]
+            }, (err, res) => {
+                processResponse(err, res, contentEvent.dialogId);
+            });
+            greenlight = 0;
+        }
+
+    }, 100); // Pause for 100 milliseconds so only the last utterance from the customer is processed.
+             // This is to prevent multiple utterances being processed when a conversation is transferred to the bot.
+
+});
 
 // Process the conversation response.
 function processResponse(err, response, dialogID) {
@@ -232,31 +265,6 @@ function processResponse(err, response, dialogID) {
     }
 }
 
-// This code sends the customer message to the bot.
-echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
-
-    greenlight = 1;
-
-    console.log("Sending message: " + contentEvent.message);
-    message = contentEvent.message;
-
-    setTimeout(function(){
-
-        if(greenlight){
-            assistant.message({
-                workspace_id: process.env.WCS_WORKSPACE_ID,
-                input: {text: message},
-                context : umsDialogToWatsonContext[contentEvent.dialogId]
-            }, (err, res) => {
-                processResponse(err, res, contentEvent.dialogId);
-            });
-            greenlight = 0;
-        }
-
-    }, 100); // Pause for 100 milliseconds so only the last utterance from the customer is processed.
-             // This is to prevent multiple utterances being processed when a conversation is transferred to the bot.
-
-});
 
 /*******************************************************************
  * Functions which are called by the main processResponse function *
@@ -466,11 +474,5 @@ function convertSkill(skillName) {
     }
 
 }
-
-// This get's executed when the scripts starts...
-echoAgent.on('connected', data => {
-    // Call the retrieveBaseURI which in turn will load the skill array from the LiveEngage account
-    retrieveBaseURI();
-});
 
 /*********************************** EOF ***********************************/
