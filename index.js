@@ -90,21 +90,28 @@ echoAgent.on('connected', data => {
 echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
 
     greenlight = 1;
-
-    console.log("Sending message: " + contentEvent.message);
     message = contentEvent.message;
 
     setTimeout(function(){
 
         if(greenlight){
-            assistant.message({
-                workspace_id: process.env.WCS_WORKSPACE_ID,
-                input: {text: message},
-                context : umsDialogToWatsonContext[contentEvent.dialogId]
-            }, (err, res) => {
-                processResponse(err, res, contentEvent.dialogId);
-            });
-            greenlight = 0;
+            if(typeof contentEvent.message !== 'object'){ // Check to make sure that the message from the customer is plain text.
+                console.log("Sending message: " + contentEvent.message);
+                assistant.message({
+                    workspace_id: process.env.WCS_WORKSPACE_ID,
+                    input: {text: message},
+                    context : umsDialogToWatsonContext[contentEvent.dialogId]
+                }, (err, res) => {
+                    processResponse(err, res, contentEvent.dialogId);
+                });
+                greenlight = 0;
+            }
+            else { // If the message is not plain text (i.e. image or audio-clip) then handle appropriately.
+                console.log("Sending message: *** Image or audio-clip object detected and blocked ***");
+                message = "Unfortunately I cannot process images or audio clips at this time. Please send a plain text response.";
+                console.log('Return message : ' + message.substring(0, 50) + '...'); // Post the answer to the console, truncated for readability.
+                sendPlainText(message, contentEvent.dialogId);
+            }
         }
 
     }, 100); // Pause for 100 milliseconds so only the last utterance from the customer is processed.
