@@ -10,6 +10,6 @@
   "dependencies": {
     "dotenv": "^6.0.0",
     "node-agent-sdk": "^1.0.3",
-    "watson-developer-cloud": "^3.5.0"
+    "watson-developer-cloud": "^3.6.0"
   }
 }
