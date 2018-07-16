@@ -33,6 +33,7 @@ var answer = "";
 var sc_answer = "";
 var metadata = "";
 var abc_metadata = "";
+var qr_metadata = "";
 var typingdelay = parseInt(process.env.TYPING_DELAY, 10); // Convert the TYPING_DELAY env. variable to an integer.
 var snippetdelay = parseInt(process.env.SNIPPET_DELAY, 10); // Convert the ANSWER_DELAY env. variable to an integer.
 var closedelay = parseInt(process.env.CLOSE_DELAY, 10); // Convert the CLOSE_DELAY env. variable to an integer.
@@ -181,10 +182,16 @@ function processResponse(err, response, dialogID) {
                 // If structured content is detected, call the sendStructuredContent function.
                 if (answer.startsWith("{")) {
 
-                    // If metadata is detected in the response then send as ABC Structured Content.
-                    if (typeof response.output.abc !== "undefined") {
-                        metadata = response.output.abc.metadata;
-                        sendABCStructuredContent(answer, metadata, dialogID);
+                    if (typeof response.output.endpoint !== "undefined") {
+                        // If metadata is detected in the ABC response then send as ABC Structured Content.
+                        if (response.output.endpoint.type === "abc") {
+                            metadata = response.output.endpoint.value;
+                            sendABCStructuredContent(answer, metadata, dialogID);
+                        // Elseif metadata is detected in the QR response then send as QR Structured Content.
+                        } else if (response.output.endpoint.type === "quickreplies") {
+                            metadata = response.output.endpoint.value;
+                            sendQRStructuredContent(answer, metadata, dialogID);
+                        }
                     // Otherwise send as regular Structured Content.
                     } else {
                         sendStructuredContent(answer, dialogID);
@@ -344,6 +351,30 @@ function sendABCStructuredContent(answer, metadata, dialogID) {
             content: sc_answer
         }
     }, null, abc_metadata, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
+
+}
+
+// This function sends an ABC Structured Content message to the UMS.
+function sendQRStructuredContent(answer, metadata, dialogID) {
+
+    console.log('Message format : LP Structured Content - QuickReply');
+    sc_answer = JSON.parse(answer);
+    qr_metadata = metadata;
+
+    echoAgent.publishEvent({
+        dialogId: dialogID,
+        event: {
+            type: 'ContentEvent',
+            contentType: 'text/plain',
+            message: qr_metadata,
+            quickReplies: sc_answer
+        }
+    }, (res, body) => {
         if (res) {
             console.error(res);
             console.error(body);
