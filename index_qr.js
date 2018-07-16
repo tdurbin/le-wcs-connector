@@ -183,11 +183,11 @@ function processResponse(err, response, dialogID) {
                 if (answer.startsWith("{")) {
 
                     // If metadata is detected in the ABC response then send as ABC Structured Content.
-                    if (typeof response.output.abc !== "undefined") {
-                        metadata = response.output.abc.metadata;
+                    if (response.output.endpoint.type === "abc") {
+                        metadata = response.output.endpoint.value;
                         sendABCStructuredContent(answer, metadata, dialogID);
                     // Elseif metadata is detected in the QR response then send as QR Structured Content.
-                    } else if (typeof response.output.qr !== "undefined") {
+                    } else if (response.output.endpoint.type === "quickreplies") {
                         metadata = response.output.qr.metadata;
                         sendQRStructuredContent(answer, metadata, dialogID);
                     // Otherwise send as regular Structured Content.

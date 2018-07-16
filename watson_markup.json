@@ -4,7 +4,7 @@
   "description": "le_wcs_connector",
   "main": "index.js",
   "scripts": {
-    "start": "node index_qr.js"
+    "start": "node index.js"
   },
   "author": "tdurbin",
   "dependencies": {
