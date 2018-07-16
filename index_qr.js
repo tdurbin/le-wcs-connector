@@ -187,7 +187,7 @@ function processResponse(err, response, dialogID) {
                         metadata = response.output.abc.metadata;
                         sendABCStructuredContent(answer, metadata, dialogID);
                     // Elseif metadata is detected in the QR response then send as QR Structured Content.
-                    } elseif (typeof response.output.qr !== "undefined") {
+                    } else if (typeof response.output.qr !== "undefined") {
                         metadata = response.output.qr.metadata;
                         sendQRStructuredContent(answer, metadata, dialogID);
                     // Otherwise send as regular Structured Content.
