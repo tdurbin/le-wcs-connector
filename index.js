@@ -179,19 +179,23 @@ function processResponse(err, response, dialogID) {
 
                 console.log('Return message : ' + answer.substring(0, 50) + '...'); // Post the answer to the console, truncated for readability.
 
-                // If structured content is detected, call the sendStructuredContent function.
+                // If structured content is detected, evaluate the type of structured content and process appropriately.
                 if (answer.startsWith("{")) {
 
+                    // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
-                        // If metadata is detected in the ABC response then send as ABC Structured Content.
+                        // If endpoint is identified as ABC then seusend as ABC Structured Content.
                         if (response.output.endpoint.type === "abc") {
                             metadata = response.output.endpoint.value;
                             sendABCStructuredContent(answer, metadata, dialogID);
-                        // Elseif metadata is detected in the QR response then send as QR Structured Content.
+                        // Else if structured content contains a QuickReply then send as QR Structured Content.
                         } else if (response.output.endpoint.type === "quickreplies") {
                             metadata = response.output.endpoint.value;
                             sendQRStructuredContent(answer, metadata, dialogID);
                         }
+
+                        // Add other else if statements here for other endpoints when made available.
+
                     // Otherwise send as regular Structured Content.
                     } else {
                         sendStructuredContent(answer, dialogID);
