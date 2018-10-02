@@ -397,37 +397,8 @@ function sendResponseSnippet(answerarray, item, dialogID) {
 // This function recurses through the message snippet array and calls the sendMySnippet function.
 function callbackSnippet(answerarray, item, dialogID, callback) {
 
-    // Initiate typing indicator prior to the bot response.
-    echoAgent.publishEvent({
-        "dialogId": dialogID,
-        "event": {
-            "type": "ChatStateEvent",
-            "chatState": "COMPOSING"
-        }
-    }, (res, body) => {
-        if (res) {
-            console.error(res);
-            console.error(body);
-        }
-    });
-
     snippet = answerarray[item];
     setTimeout(function() {
-
-        // Cancel typing indicator before the bot responds.
-        echoAgent.publishEvent({
-            "dialogId": dialogID,
-            "event": {
-                "type": "ChatStateEvent",
-                "chatState": "ACTIVE"
-            }
-        }, (res, body) => {
-            if (res) {
-                console.error(res);
-                console.error(body);
-            }
-        });
-
         sendMySnippet(snippet, item, dialogID);
         item = item + 1;
         if (item < answerarray.length) {
