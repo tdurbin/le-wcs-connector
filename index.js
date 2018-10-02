@@ -182,7 +182,7 @@ function processResponse(err, response, dialogID) {
                 // If structured content is detected, evaluate the type of structured content and process appropriately.
                 if (answer.startsWith("{")) {
 
-                    console.log('Response Type: ' + response.output.generic.response_type);
+                    console.log('Response Type: ' + response.output.response_type);
 
                     // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
