@@ -185,39 +185,13 @@ function processResponse(err, response, dialogID) {
                     // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
 
-                        if (response.output.endpoint.time !== "undefined") {
+                        if (response.output.endpoint.delay_multiplier !== "undefined") {
 
-                            console.log('Response type  : ' + response.output.endpoint.time);
-
-                            // Initiate typing indicator prior to the bot response.
-                            echoAgent.publishEvent({
-                                "dialogId": dialogID,
-                                "event": {
-                                    "type": "ChatStateEvent",
-                                    "chatState": "COMPOSING"
-                                }
-                            }, (res, body) => {
-                                if (res) {
-                                    console.error(res);
-                                    console.error(body);
-                                }
-                            });
+                            console.log('Num of delays   : ' + response.output.endpoint.delay_multiplier);
+                            var delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
+                            console.log('Total delay time: ' + delayTotal);
 
                             setTimeout(function() {
-
-                                // Cancel typing indicator before the bot responds.
-                                echoAgent.publishEvent({
-                                    "dialogId": dialogID,
-                                    "event": {
-                                        "type": "ChatStateEvent",
-                                        "chatState": "ACTIVE"
-                                    }
-                                }, (res, body) => {
-                                    if (res) {
-                                        console.error(res);
-                                        console.error(body);
-                                    }
-                                });
 
                                 // If endpoint is identified as ABC then seusend as ABC Structured Content.
                                 if (response.output.endpoint.type === "abc") {
@@ -231,7 +205,7 @@ function processResponse(err, response, dialogID) {
 
                                 // Add other else if statements here for other endpoints when made available.
 
-                            }, response.output.endpoint.time);
+                            }, delayTotal);
 
                         } else {
 
@@ -450,36 +424,8 @@ function sendResponseSnippet(answerarray, item, dialogID) {
 // This function recurses through the message snippet array and calls the sendMySnippet function.
 function callbackSnippet(answerarray, item, dialogID, callback) {
 
-    // Initiate typing indicator prior to the bot response.
-    echoAgent.publishEvent({
-        "dialogId": dialogID,
-        "event": {
-            "type": "ChatStateEvent",
-            "chatState": "COMPOSING"
-        }
-    }, (res, body) => {
-        if (res) {
-            console.error(res);
-            console.error(body);
-        }
-    });
-
     snippet = answerarray[item];
     setTimeout(function() {
-
-        // Cancel typing indicator before the bot responds.
-        echoAgent.publishEvent({
-            "dialogId": dialogID,
-            "event": {
-                "type": "ChatStateEvent",
-                "chatState": "ACTIVE"
-            }
-        }, (res, body) => {
-            if (res) {
-                console.error(res);
-                console.error(body);
-            }
-        });
 
         sendMySnippet(snippet, item, dialogID);
         item = item + 1;
