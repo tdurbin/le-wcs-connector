@@ -186,47 +186,34 @@ function processResponse(err, response, dialogID) {
                     if (typeof response.output.endpoint !== "undefined") {
 
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
-
-                            console.log('Num of delays   : ' + response.output.endpoint.delay_multiplier);
                             var delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
-                            console.log('Total delay time: ' + delayTotal);
-
-                            setTimeout(function() {
-
-                                // If endpoint is identified as ABC then seusend as ABC Structured Content.
-                                if (response.output.endpoint.type === "abc") {
-                                    metadata = response.output.endpoint.value;
-                                    sendABCStructuredContent(answer, metadata, dialogID);
-                                    // Else if structured content contains a QuickReply then send as QR Structured Content.
-                                } else if (response.output.endpoint.type === "quickreplies") {
-                                    metadata = response.output.endpoint.value;
-                                    sendQRStructuredContent(answer, metadata, dialogID);
-                                }
-
-                                // Add other else if statements here for other endpoints when made available.
-
-                            }, delayTotal);
-
                         } else {
+                            var delayTotal = 0;
+                        }
 
-                            // If endpoint is identified as ABC then seusend as ABC Structured Content.
+                        console.log('Delay time     : ' + delayTotal);
+
+                        setTimeout(function() {
+
+                            // If endpoint is identified as ABC then send as ABC Structured Content.
                             if (response.output.endpoint.type === "abc") {
                                 metadata = response.output.endpoint.value;
                                 sendABCStructuredContent(answer, metadata, dialogID);
-                                // Else if structured content contains a QuickReply then send as QR Structured Content.
+                            // Else if structured content contains a QuickReply then send as QR Structured Content.
                             } else if (response.output.endpoint.type === "quickreplies") {
                                 metadata = response.output.endpoint.value;
                                 sendQRStructuredContent(answer, metadata, dialogID);
+                            } else if (response.output.endpoint.type === "lpsc") {
+                                sendStructuredContent(answer, dialogID);
                             }
 
-                            // Add other else if statements here for other endpoints when made available.
-
-                        }
+                        }, delayTotal);
 
                     // Otherwise send as regular Structured Content.
                     } else {
                         sendStructuredContent(answer, dialogID);
                     }
+
                 }
 
                 // Else if line breaks in plain text messsage are detected, send as snippets.
