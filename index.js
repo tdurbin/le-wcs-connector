@@ -187,10 +187,11 @@ function processResponse(err, response, dialogID) {
 
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
                             var delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
-                            console.log('Delay time     : ' + delayTotal);
                         } else {
                             var delayTotal = 0;
                         }
+
+                        console.log('Delay time     : ' + delayTotal);
 
                         setTimeout(function() {
 
