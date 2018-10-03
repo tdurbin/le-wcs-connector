@@ -416,8 +416,10 @@ function sendResponseSnippet(answerarray, item, dialogID) {
 function callbackSnippet(answerarray, item, dialogID, callback) {
 
     snippet = answerarray[item];
+    startTyping(dialogID);
     setTimeout(function() {
 
+        finishTyping(dialogID);
         sendMySnippet(snippet, item, dialogID);
         item = item + 1;
         if (item < answerarray.length) {
