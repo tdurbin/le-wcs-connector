@@ -147,7 +147,7 @@ function processResponse(err, response, dialogID) {
 //            }
 //        });
 
-        startTyping();
+        startTyping(dialogID);
 
         // If an intent is detected, log it out to the console.
         if (response.intents.length > 0) {
@@ -177,7 +177,7 @@ function processResponse(err, response, dialogID) {
 //                    }
 //                });
 
-                finishTyping();
+                finishTyping(dialogID);
 
                 answer = response.output.text[i];
 
@@ -548,7 +548,7 @@ function convertSkill(skillName) {
 
 }
 
-function startTyping() {
+function startTyping(dialogID) {
 
     echoAgent.publishEvent({
         "dialogId": dialogID,
@@ -565,7 +565,7 @@ function startTyping() {
 
 }
 
-function finishTyping() {
+function finishTyping(dialogID) {
 
     echoAgent.publishEvent({
         "dialogId": dialogID,
