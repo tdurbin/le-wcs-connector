@@ -163,10 +163,9 @@ function processResponse(err, response, dialogID) {
                     // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
 
+                        var delayTotal = 0;
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
-                            var delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
-                        } else {
-                            var delayTotal = 10;
+                            delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
                         }
 
                         console.log('Delay time     : ' + delayTotal);
@@ -209,7 +208,7 @@ function processResponse(err, response, dialogID) {
                     } else {
                         console.log('     Snippet ' + item + ' : -> *** blank snippet ***');
                     }
-                    
+
                     // Subsequent snippets are then sent via a callback function with the pre-defined snippet delay.
                     item = 1;
                     sendResponseSnippet(answerarray, item, dialogID, 0, function(err, resp) {});
