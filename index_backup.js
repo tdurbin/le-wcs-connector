@@ -134,18 +134,7 @@ function processResponse(err, response, dialogID) {
     if (response.output.text.length != 0) {
 
         // Initiate typing indicator prior to the bot response.
-        echoAgent.publishEvent({
-            "dialogId": dialogID,
-            "event": {
-                "type": "ChatStateEvent",
-                "chatState": "COMPOSING"
-            }
-        }, (res, body) => {
-            if (res) {
-                console.error(res);
-                console.error(body);
-            }
-        });
+        startTyping(dialogID);
 
         // If an intent is detected, log it out to the console.
         if (response.intents.length > 0) {
@@ -162,18 +151,7 @@ function processResponse(err, response, dialogID) {
             for (var i = 0; i < response.output.text.length; i++) {
 
                 // Cancel typing indicator before the bot responds.
-                echoAgent.publishEvent({
-                    "dialogId": dialogID,
-                    "event": {
-                        "type": "ChatStateEvent",
-                        "chatState": "ACTIVE"
-                    }
-                }, (res, body) => {
-                    if (res) {
-                        console.error(res);
-                        console.error(body);
-                    }
-                });
+                finishTyping(dialogID);
 
                 answer = response.output.text[i];
 
@@ -184,22 +162,34 @@ function processResponse(err, response, dialogID) {
 
                     // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
-                        // If endpoint is identified as ABC then seusend as ABC Structured Content.
-                        if (response.output.endpoint.type === "abc") {
-                            metadata = response.output.endpoint.value;
-                            sendABCStructuredContent(answer, metadata, dialogID);
-                        // Else if structured content contains a QuickReply then send as QR Structured Content.
-                        } else if (response.output.endpoint.type === "quickreplies") {
-                            metadata = response.output.endpoint.value;
-                            sendQRStructuredContent(answer, metadata, dialogID);
+
+                        var delayTotal = 0;
+
+                        if (response.output.endpoint.delay_multiplier !== "undefined") {
+                            delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
                         }
 
-                        // Add other else if statements here for other endpoints when made available.
+                        setTimeout(function() {
+
+                            // If endpoint is identified as ABC then send as ABC Structured Content.
+                            if (response.output.endpoint.type === "abc") {
+                                metadata = response.output.endpoint.value;
+                                sendABCStructuredContent(answer, metadata, dialogID);
+                            // Else if structured content contains a QuickReply then send as QR Structured Content.
+                            } else if (response.output.endpoint.type === "quickreplies") {
+                                metadata = response.output.endpoint.value;
+                                sendQRStructuredContent(answer, metadata, dialogID);
+                            } else if (response.output.endpoint.type === "lpsc") {
+                                sendStructuredContent(answer, dialogID);
+                            }
+
+                        }, delayTotal);
 
                     // Otherwise send as regular Structured Content.
                     } else {
                         sendStructuredContent(answer, dialogID);
                     }
+
                 }
 
                 // Else if line breaks in plain text messsage are detected, send as snippets.
@@ -208,10 +198,16 @@ function processResponse(err, response, dialogID) {
                     console.log('Message format : Plain text with snippets');
                     // Split the response into an array of snippets, and trim any whitespace either side of the snippets.
                     var answerarray = answer.split('|').map(item => item.trim());
+
                     // Send the first snippet directly so there is no delay after typing indicator.
                     item = 0;
                     snippet = answerarray[item];
-                    sendMySnippet(snippet, item, dialogID);
+                    if (snippet.length != 0) {
+                        sendMySnippet(snippet, item, dialogID);
+                    } else {
+                        console.log('     Snippet ' + item + ' : -> *** blank snippet ***');
+                    }
+
                     // Subsequent snippets are then sent via a callback function with the pre-defined snippet delay.
                     item = 1;
                     sendResponseSnippet(answerarray, item, dialogID, 0, function(err, resp) {});
@@ -399,7 +395,12 @@ function callbackSnippet(answerarray, item, dialogID, callback) {
 
     snippet = answerarray[item];
     setTimeout(function() {
-        sendMySnippet(snippet, item, dialogID);
+
+        if (snippet.length != 0) {
+            sendMySnippet(snippet, item, dialogID);
+        } else {
+            console.log('     Snippet ' + item + ' : -> *** blank snippet ***');
+        }
         item = item + 1;
         if (item < answerarray.length) {
             callbackSnippet(answerarray, item, dialogID, callback);
@@ -526,6 +527,42 @@ function convertSkill(skillName) {
         console.log('*** WARNING: skill not found ***');
         return -1;
     }
+
+}
+
+// This function initiates the typing indicator.
+function startTyping(dialogID) {
+
+    echoAgent.publishEvent({
+        "dialogId": dialogID,
+        "event": {
+            "type": "ChatStateEvent",
+            "chatState": "COMPOSING"
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
+
+}
+
+// This function stops the typing indicator.
+function finishTyping(dialogID) {
+
+    echoAgent.publishEvent({
+        "dialogId": dialogID,
+        "event": {
+            "type": "ChatStateEvent",
+            "chatState": "ACTIVE"
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
 
 }
 
