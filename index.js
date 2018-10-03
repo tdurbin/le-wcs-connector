@@ -101,7 +101,7 @@ echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
                 assistant.message({
                     input: {text: message},
                     assistant_id: process.env.WCS_WORKSPACE_ID,
-                    session_id : umsDialogToWatsonContext[contentEvent.dialogId]
+                    session_id : umsDialogToWatsonContext[contentEvent.dialogId],
                 }, (err, res) => {
                     processResponse(err, res, contentEvent.dialogId);
                 });
