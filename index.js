@@ -203,6 +203,7 @@ function processResponse(err, response, dialogID) {
                     // Send the first snippet directly so there is no delay after typing indicator.
                     item = 0;
                     snippet = answerarray[item];
+                    console.log('Snippet length : ' + snippet.length);
                     sendMySnippet(snippet, item, dialogID);
                     // Subsequent snippets are then sent via a callback function with the pre-defined snippet delay.
                     item = 1;
@@ -392,7 +393,7 @@ function callbackSnippet(answerarray, item, dialogID, callback) {
     snippet = answerarray[item];
     setTimeout(function() {
 
-        console.log('Snippet length :' + snippet.length);
+        console.log('Snippet length : ' + snippet.length);
         sendMySnippet(snippet, item, dialogID);
         item = item + 1;
         if (item < answerarray.length) {
