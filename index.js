@@ -179,6 +179,7 @@ function processResponse(err, response, dialogID) {
                             } else if (response.output.endpoint.type === "quickreplies") {
                                 metadata = response.output.endpoint.value;
                                 sendQRStructuredContent(answer, metadata, dialogID);
+                            // Else if send as regular structured content.
                             } else if (response.output.endpoint.type === "lpsc") {
                                 sendStructuredContent(answer, dialogID);
                             }
