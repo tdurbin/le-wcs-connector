@@ -200,13 +200,16 @@ function processResponse(err, response, dialogID) {
                     console.log('Message format : Plain text with snippets');
                     // Split the response into an array of snippets, and trim any whitespace either side of the snippets.
                     var answerarray = answer.split('|').map(item => item.trim());
+
                     // Send the first snippet directly so there is no delay after typing indicator.
                     item = 0;
                     snippet = answerarray[item];
-                    console.log('Snippet length : ' + snippet.length);
                     if (snippet.length != 0) {
                         sendMySnippet(snippet, item, dialogID);
+                    } else {
+                        console.log('     Snippet ' + item + ' : -> *** blank snippet ***');
                     }
+                    
                     // Subsequent snippets are then sent via a callback function with the pre-defined snippet delay.
                     item = 1;
                     sendResponseSnippet(answerarray, item, dialogID, 0, function(err, resp) {});
@@ -395,9 +398,10 @@ function callbackSnippet(answerarray, item, dialogID, callback) {
     snippet = answerarray[item];
     setTimeout(function() {
 
-        console.log('Snippet length : ' + snippet.length);
         if (snippet.length != 0) {
             sendMySnippet(snippet, item, dialogID);
+        } else {
+            console.log('     Snippet ' + item + ' : -> *** blank snippet ***');
         }
         item = item + 1;
         if (item < answerarray.length) {
