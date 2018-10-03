@@ -134,19 +134,6 @@ function processResponse(err, response, dialogID) {
     if (response.output.text.length != 0) {
 
         // Initiate typing indicator prior to the bot response.
-//        echoAgent.publishEvent({
-//            "dialogId": dialogID,
-//            "event": {
-//                "type": "ChatStateEvent",
-//                "chatState": "COMPOSING"
-//            }
-//        }, (res, body) => {
-//            if (res) {
-//                console.error(res);
-//                console.error(body);
-//            }
-//        });
-
         startTyping(dialogID);
 
         // If an intent is detected, log it out to the console.
@@ -164,19 +151,6 @@ function processResponse(err, response, dialogID) {
             for (var i = 0; i < response.output.text.length; i++) {
 
                 // Cancel typing indicator before the bot responds.
-//                echoAgent.publishEvent({
-//                    "dialogId": dialogID,
-//                    "event": {
-//                        "type": "ChatStateEvent",
-//                        "chatState": "ACTIVE"
-//                    }
-//                }, (res, body) => {
-//                    if (res) {
-//                        console.error(res);
-//                        console.error(body);
-//                    }
-//                });
-
                 finishTyping(dialogID);
 
                 answer = response.output.text[i];
@@ -416,10 +390,8 @@ function sendResponseSnippet(answerarray, item, dialogID) {
 function callbackSnippet(answerarray, item, dialogID, callback) {
 
     snippet = answerarray[item];
-    startTyping(dialogID);
     setTimeout(function() {
 
-        finishTyping(dialogID);
         sendMySnippet(snippet, item, dialogID);
         item = item + 1;
         if (item < answerarray.length) {
@@ -550,6 +522,7 @@ function convertSkill(skillName) {
 
 }
 
+// This function initiates the typing indicator.
 function startTyping(dialogID) {
 
     echoAgent.publishEvent({
@@ -567,6 +540,7 @@ function startTyping(dialogID) {
 
 }
 
+// This function stops the typing indicator.
 function finishTyping(dialogID) {
 
     echoAgent.publishEvent({
