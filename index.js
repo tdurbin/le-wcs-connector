@@ -166,7 +166,7 @@ function processResponse(err, response, dialogID) {
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
                             var delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
                         } else {
-                            var delayTotal = 0;
+                            var delayTotal = 10;
                         }
 
                         console.log('Delay time     : ' + delayTotal);
