@@ -392,6 +392,7 @@ function callbackSnippet(answerarray, item, dialogID, callback) {
     snippet = answerarray[item];
     setTimeout(function() {
 
+        console.log('Snippet length :' + snippet.length);
         sendMySnippet(snippet, item, dialogID);
         item = item + 1;
         if (item < answerarray.length) {
