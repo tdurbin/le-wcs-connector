@@ -163,7 +163,7 @@ function processResponse(err, response, dialogID) {
                     // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
 
-                        var delayTotal = 1;
+                        var delayTotal = 0;
                         console.log('Delay multipler: ' + response.output.endpoint.delay_multiplier);
                         console.log('Delay time     : ' + delayTotal);
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
