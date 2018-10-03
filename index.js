@@ -164,12 +164,10 @@ function processResponse(err, response, dialogID) {
                     if (typeof response.output.endpoint !== "undefined") {
 
                         var delayTotal = 0;
-                        console.log('Delay multipler: ' + response.output.endpoint.delay_multiplier);
-                        console.log('Delay time     : ' + delayTotal);
+
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
                             delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
                         }
-
 
                         setTimeout(function() {
 
