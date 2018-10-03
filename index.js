@@ -163,7 +163,7 @@ function processResponse(err, response, dialogID) {
                     // Check to see if an endpoint specific type of structured content is detected.
                     if (typeof response.output.endpoint !== "undefined") {
 
-                        var delayTotal = 0;
+                        var delayTotal = 1;
                         if (response.output.endpoint.delay_multiplier !== "undefined") {
                             delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
                         }
