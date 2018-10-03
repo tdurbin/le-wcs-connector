@@ -204,7 +204,9 @@ function processResponse(err, response, dialogID) {
                     item = 0;
                     snippet = answerarray[item];
                     console.log('Snippet length : ' + snippet.length);
-                    sendMySnippet(snippet, item, dialogID);
+                    if (snippet.length != 0) {
+                        sendMySnippet(snippet, item, dialogID);
+                    }
                     // Subsequent snippets are then sent via a callback function with the pre-defined snippet delay.
                     item = 1;
                     sendResponseSnippet(answerarray, item, dialogID, 0, function(err, resp) {});
@@ -394,7 +396,9 @@ function callbackSnippet(answerarray, item, dialogID, callback) {
     setTimeout(function() {
 
         console.log('Snippet length : ' + snippet.length);
-        sendMySnippet(snippet, item, dialogID);
+        if (snippet.length != 0) {
+            sendMySnippet(snippet, item, dialogID);
+        }
         item = item + 1;
         if (item < answerarray.length) {
             callbackSnippet(answerarray, item, dialogID, callback);
