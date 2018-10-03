@@ -45,10 +45,10 @@ var accountId = process.env.LP_ACCOUNT_ID;
 var greenlight = 1;
 
 // Watson Assistant credentials.
-var assistant = new watson.AssistantV1({
+var assistant = new watson.AssistantV2({
     username: process.env.WCS_USERNAME,
     password: process.env.WCS_PASSWORD,
-    version: '2018-02-16'
+    version: '2018-09-19'
 });
 
 // LE bot agent credentials.
@@ -99,9 +99,9 @@ echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
             if(typeof contentEvent.message !== 'object'){ // Check to make sure that the message from the customer is plain text.
                 console.log("Sending message: " + contentEvent.message);
                 assistant.message({
-                    workspace_id: process.env.WCS_WORKSPACE_ID,
                     input: {text: message},
-                    context : umsDialogToWatsonContext[contentEvent.dialogId]
+                    assistant_id: process.env.WCS_WORKSPACE_ID,
+                    session_id : umsDialogToWatsonContext[contentEvent.dialogId]
                 }, (err, res) => {
                     processResponse(err, res, contentEvent.dialogId);
                 });
@@ -160,7 +160,27 @@ function processResponse(err, response, dialogID) {
                 // If structured content is detected, evaluate the type of structured content and process appropriately.
                 if (answer.startsWith("{")) {
 
+                    // ****************************************************************************
                     // Check to see if an endpoint specific type of structured content is detected.
+                    // ****************************************************************************
+                    //
+                    // Example JSON syntax in Watson Assistant...
+                    //
+                    // {
+                    //   "output": {
+                    //     "text": {
+                    //       "values": [ xxx ],
+                    //       "selection_policy": "sequential"
+                    //     },
+                    //     "endpoint": {
+                    //       "type": "abc | quickreplies | lpsc",
+                    //       "value": "Blah blah blah",
+                    //       "delay_multiplier": 1
+                    //     }
+                    //   }
+                    // }
+                    //
+                    // ****************************************************************************
                     if (typeof response.output.endpoint !== "undefined") {
 
                         var delayTotal = 0;
