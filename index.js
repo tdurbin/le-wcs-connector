@@ -134,18 +134,20 @@ function processResponse(err, response, dialogID) {
     if (response.output.text.length != 0) {
 
         // Initiate typing indicator prior to the bot response.
-        echoAgent.publishEvent({
-            "dialogId": dialogID,
-            "event": {
-                "type": "ChatStateEvent",
-                "chatState": "COMPOSING"
-            }
-        }, (res, body) => {
-            if (res) {
-                console.error(res);
-                console.error(body);
-            }
-        });
+//        echoAgent.publishEvent({
+//            "dialogId": dialogID,
+//            "event": {
+//                "type": "ChatStateEvent",
+//                "chatState": "COMPOSING"
+//            }
+//        }, (res, body) => {
+//            if (res) {
+//                console.error(res);
+//                console.error(body);
+//            }
+//        });
+
+        startTyping();
 
         // If an intent is detected, log it out to the console.
         if (response.intents.length > 0) {
@@ -162,18 +164,20 @@ function processResponse(err, response, dialogID) {
             for (var i = 0; i < response.output.text.length; i++) {
 
                 // Cancel typing indicator before the bot responds.
-                echoAgent.publishEvent({
-                    "dialogId": dialogID,
-                    "event": {
-                        "type": "ChatStateEvent",
-                        "chatState": "ACTIVE"
-                    }
-                }, (res, body) => {
-                    if (res) {
-                        console.error(res);
-                        console.error(body);
-                    }
-                });
+//                echoAgent.publishEvent({
+//                    "dialogId": dialogID,
+//                    "event": {
+//                        "type": "ChatStateEvent",
+//                        "chatState": "ACTIVE"
+//                    }
+//                }, (res, body) => {
+//                    if (res) {
+//                        console.error(res);
+//                        console.error(body);
+//                    }
+//                });
+
+                finishTyping();
 
                 answer = response.output.text[i];
 
@@ -541,6 +545,40 @@ function convertSkill(skillName) {
         console.log('*** WARNING: skill not found ***');
         return -1;
     }
+
+}
+
+function startTyping() {
+
+    echoAgent.publishEvent({
+        "dialogId": dialogID,
+        "event": {
+            "type": "ChatStateEvent",
+            "chatState": "COMPOSING"
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
+
+}
+
+function finishTyping() {
+
+    echoAgent.publishEvent({
+        "dialogId": dialogID,
+        "event": {
+            "type": "ChatStateEvent",
+            "chatState": "ACTIVE"
+        }
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        }
+    });
 
 }
 
