@@ -433,6 +433,7 @@ function sendMySnippet(snippet, item, dialogID) {
 // This function closes an active conversation.
 function closeConversation(dialogID) {
 
+    setTimeout(function() {
     echoAgent.updateConversationField({
         conversationId: dialogID,
         conversationField: [{
@@ -447,6 +448,7 @@ function closeConversation(dialogID) {
             delete umsDialogToWatsonContext[dialogID];
         }
     });
+}, 500);
 
 }
 
