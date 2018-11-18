@@ -9,7 +9,7 @@
   "author": "tdurbin",
   "dependencies": {
     "dotenv": "^6.0.0",
-    "node-agent-sdk": "^1.0.5",
-    "watson-developer-cloud": "^3.11.1"
+    "node-agent-sdk": "^1.1.2",
+    "watson-developer-cloud": "^3.13.0"
   }
 }
