@@ -216,7 +216,7 @@ function processResponse(err, response, dialogID) {
                 }
 
                 // Otherwise the response should just be sent a plain text. First check for delay...
-                else
+                else {
 
                     sendPlainText(answer, dialogID);
 
