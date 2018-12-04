@@ -218,7 +218,7 @@ function processResponse(err, response, dialogID) {
                 // Otherwise the response should just be sent a plain text. First check for delay...
                 else {
 
-                    if (typeof response.output.endpoint !== "undefined") {
+                    if (response.output.endpoint.type === "plain") {
 
                         var delayTotal = 0;
 
@@ -237,7 +237,6 @@ function processResponse(err, response, dialogID) {
                     sendPlainText(answer, dialogID);
 
                 }
-
 
                 // Identify and then process any actions specified in the JSON response.
                 if (typeof response.output.action !== "undefined") {
