@@ -215,25 +215,24 @@ function processResponse(err, response, dialogID) {
 
                 }
 
-                // Otherwise the response should just be sent a plain text.
-                else if (typeof response.output.endpoint !== "undefined") {
-
-                    var delayTotal = 0;
-
-                    if (response.output.endpoint.delay_multiplier !== "undefined") {
-                        delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
-                    }
-
-                    setTimeout(function() {
-
-                        sendPlainText(answer, dialogID);
-
-                    }, delayTotal);
-
-                }
-
-                // Otherwise the response should just be sent a plain text.
+                // Otherwise the response should just be sent a plain text. First check for delay...
                 else {
+
+                    if (typeof response.output.endpoint !== "undefined") {
+
+                        var delayTotal = 0;
+
+                        if (response.output.endpoint.delay_multiplier !== "undefined") {
+                            delayTotal = response.output.endpoint.delay_multiplier * snippetdelay;
+                        }
+
+                        setTimeout(function() {
+
+                            sendPlainText(answer, dialogID);
+
+                        }, delayTotal);
+
+                    }
 
                     sendPlainText(answer, dialogID);
 
