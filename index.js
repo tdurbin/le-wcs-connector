@@ -216,7 +216,7 @@ function processResponse(err, response, dialogID) {
                 }
 
                 // Otherwise the response should just be sent a plain text.
-                else (typeof response.output.endpoint !== "undefined") {
+                else if (typeof response.output.endpoint !== "undefined") {
 
                     var delayTotal = 0;
 
