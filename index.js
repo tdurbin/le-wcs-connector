@@ -360,7 +360,7 @@ function sendABCStructuredContent(answer, metadata, dialogID) {
 
 }
 
-// This function sends an ABC Structured Content message to the UMS.
+// This function sends a Quick Reply message to the UMS.
 function sendQRStructuredContent(answer, metadata, dialogID) {
 
     console.log('Message format : LP Structured Content - QuickReply');
