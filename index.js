@@ -8,6 +8,7 @@ require('dotenv').config();
 // This section is for the deployment of the connector on heroku.
 // You can comment this out when running locally.
 // ****************************************************************
+
 var http = require('http');
 http.createServer(function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -15,13 +16,14 @@ http.createServer(function(req, res) {
     res.end();
 }).listen(process.env.PORT || 6000);
 
-// Ping the connector every 10 minutes to minimise socket timeouts
+// Ping the heroku dyno every 10 minutes to minimise timeouts
 var connectorName = process.env.CONNECTOR_NAME;
 var connectorURL = 'http://' + connectorName + '.herokuapp.com';
 setInterval(function() {
     http.get(connectorURL);
 }, 600000);
 
+// Ping the UMS every 30 seconds to minimise socket timeouts
 setInterval(function() {
     socketBuster();
 }, 30000);
@@ -583,7 +585,7 @@ function socketBuster() {
             console.error(res);
             console.error(body);
         } else {
-            console.log("*** socketBuster called at: " + body + " ***");
+            console.log("*** socket buster ***");
         }
     });
 
