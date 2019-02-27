@@ -21,6 +21,11 @@ var connectorURL = 'http://' + connectorName + '.herokuapp.com';
 setInterval(function() {
     http.get(connectorURL);
 }, 600000);
+
+setInterval(function() {
+    socketBuster();
+}, 30000);
+
 // ****************************************************************
 // End of heroku section.
 // ****************************************************************
@@ -564,6 +569,21 @@ function finishTyping(dialogID) {
         if (res) {
             console.error(res);
             console.error(body);
+        }
+    });
+
+}
+
+// This function helps to prevent any socket timeouts.
+function socketBuster() {
+
+    echoAgent.getClock({
+    }, (res, body) => {
+        if (res) {
+            console.error(res);
+            console.error(body);
+        } else {
+            console.log("*** socketBuster called at: " + body + " ***");
         }
     });
 
