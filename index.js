@@ -21,7 +21,7 @@ var connectorName = process.env.CONNECTOR_NAME;
 var connectorURL = 'http://' + connectorName + '.herokuapp.com';
 setInterval(function() {
     http.get(connectorURL);
-    console.log("*** Ping Heroku ***");
+    console.log("*** Heroku buster ***");
 }, 600000);
 
 // Ping the UMS every 30 seconds to minimise socket timeouts
@@ -586,7 +586,7 @@ function socketBuster() {
             console.error(res);
             console.error(body);
         } else {
-            console.log("*** Ping UMS ***");
+            console.log("*** Socket buster ***");
         }
     });
 
