@@ -31,7 +31,7 @@ setInterval(function() {
 // Ping the UMS every 30 seconds to minimise socket timeouts
 setInterval(function() {
     socketBuster();
-}, 30000);
+}, 60000);
 
 // ****************************************************************
 // End of heroku section.
