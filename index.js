@@ -9,6 +9,10 @@ require('dotenv').config();
 // You can comment this out when running locally.
 // ****************************************************************
 
+const Heroku = require('heroku-client');
+const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN });
+const dynoName = 'web.1';
+
 var http = require('http');
 http.createServer(function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -587,6 +591,7 @@ function socketBuster() {
             console.error(body);
         } else {
             console.log("*** Socket buster ***");
+            heroku .delete('/apps/' + connectorName + '/dynos/' + dynoName).then( x => console.log(x) );
         }
     });
 

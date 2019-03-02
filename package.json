@@ -10,6 +10,7 @@
   "dependencies": {
     "dotenv": "^6.2.0",
     "node-agent-sdk": "^1.1.2",
-    "watson-developer-cloud": "^3.18.0"
+    "watson-developer-cloud": "^3.18.0",
+    "heroku-client": "^3.0.7"
   }
 }
