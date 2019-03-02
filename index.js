@@ -581,7 +581,7 @@ function finishTyping(dialogID) {
 
 }
 
-// This function helps to prevent any socket timeouts.
+// This function helps to prevent any socket timeouts, and if there is a problem will restart the heroku dyno.
 function socketBuster() {
 
     echoAgent.getClock({
@@ -589,6 +589,7 @@ function socketBuster() {
         if (res) {
             console.error(res);
             console.error(body);
+            console.log("*** Restarting heroku dyno ***");
             heroku .delete('/apps/' + connectorName + '/dynos/' + dynoName).then( x => console.log(x) );
         } else {
             console.log("*** Socket buster ***");
