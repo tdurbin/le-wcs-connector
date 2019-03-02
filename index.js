@@ -31,7 +31,7 @@ setInterval(function() {
 // Ping the UMS every 30 seconds to minimise socket timeouts
 setInterval(function() {
     socketBuster();
-}, 60000);
+}, 30000);
 
 // ****************************************************************
 // End of heroku section.
@@ -589,9 +589,9 @@ function socketBuster() {
         if (res) {
             console.error(res);
             console.error(body);
+            heroku .delete('/apps/' + connectorName + '/dynos/' + dynoName).then( x => console.log(x) );
         } else {
             console.log("*** Socket buster ***");
-            heroku .delete('/apps/' + connectorName + '/dynos/' + dynoName).then( x => console.log(x) );
         }
     });
 
