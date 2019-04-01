@@ -40,7 +40,7 @@ setInterval(function() {
 var watson = require('watson-developer-cloud');
 var messagingAgent = require('./messagingAgent');
 var request = require('request');
-// var umsDialogToWatsonContext = {};
+var umsDialogToWatsonContext = {};
 var answer = "";
 var sc_answer = "";
 var metadata = "";
@@ -113,7 +113,7 @@ echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
                 assistant.message({
                     workspace_id: process.env.WCS_WORKSPACE_ID,
                     input: {text: message},
-                    context : contentEvent.dialogId
+                    context : umsDialogToWatsonContext[contentEvent.dialogId]
                 }, (err, res) => {
                     processResponse(err, res, contentEvent.dialogId);
                 });
@@ -141,7 +141,7 @@ function processResponse(err, response, dialogID) {
         return;
     }
 
-//    umsDialogToWatsonContext[dialogID] = response.context;
+    umsDialogToWatsonContext[dialogID] = response.context;
 
     if (response.output.text.length != 0) {
 
@@ -457,7 +457,7 @@ function closeConversation(dialogID) {
             console.log(err);
         } else {
             console.log("*** Conversation has been closed ***");
-            delete dialogID;
+            delete umsDialogToWatsonContext[dialogID];
         }
     });
 }, 500);
