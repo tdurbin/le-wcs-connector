@@ -116,6 +116,7 @@ echoAgent.on('messagingAgent.ContentEvent', (contentEvent) => {
                     context : umsDialogToWatsonContext[contentEvent.dialogId]
                 }, (err, res) => {
                     processResponse(err, res, contentEvent.dialogId);
+                    console.log('Dialog ID: ' + contentEvent.dialogId);
                 });
                 greenlight = 0;
             }
